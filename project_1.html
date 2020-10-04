@@ -1,0 +1,79 @@
+<!doctype html>
+
+
+<head>
+	<title>James Churchward's Portfolio</title>
+		<link rel="stylesheet"
+	type="text/css"
+	href="Layout.css">
+</head>
+
+
+
+
+
+<body>
+
+	<header>
+		<nav>
+		<h1>Linear Regression Project</h1>
+			<ul>
+				<li><a href="index.html"><b>Home</b></a></li>
+				<li><a href="Projects.html"> <b>Projects</b></a></li>
+			</ul>
+		</nav>
+	</header>
+
+<br><br><br>
+Ozone increases in higher temperatures due to high temperatures increasing speed of chemical reactions, therefore, we are expecting ozone (parts per billion) and temperature (Farenheit) measures to have a positive relationship. 
+<br><br><br>
+Ozone filters solar radiation (measured in Langleys: a unit of radiation named after Samuel Pierpoint Langley), therefore, we are expecting these  variables to have a weak or inversed relationship. 
+<br><br><br>
+
+</body>
+
+
+
+
+
+
+
+<div class="rblock">
+# Check for missing values (NA) in each variable that will be used
+<br>
+<br>NA %in% airquality$Ozone           
+<br>> [1] TRUE                  
+<br>
+<br>NA %in% airquality$Solar.R
+<br>> [1] TRUE
+<br>
+<br>NA %in% airquality$Temp
+<br>> [1] FALSE
+<br>
+<br>
+</div>
+
+  
+
+
+
+
+
+<br><br>
+The variables Ozone and Solar.R have NAs. The whole rows that have these will need to be excluded so each variable still has same number of values. This way correlations can still be calculated.
+<br>
+<br>
+<div class="rblock">
+# Create a series of subsets that exclude NAs
+<br><br>
+AQ <- subset(airquality, !is.na(airquality$Ozone))  
+<br>
+AQ <- subset(AQ, !is.na(AQ$Solar.R))               
+<br>
+<br>
+</div>
+
+
+
+
+
