@@ -16,10 +16,374 @@
 
 	<header>
 		<nav>
-		<h1>James Churchward's Portfolio</h1>
+		<h1>Logistic Regression Project - Flights</h1>
 			<ul>
 				<li><a href="index.html"><b>Home</b></a></li>
 				<li><a href="Projects.html"> <b>Projects</b></a></li>
 			</ul>
 		</nav>
 	</header>
+
+
+
+
+<div class = "tblock">
+The Flights dataset contains information on US domestic flights such as departure and arrival times/locations, airports involved etc. 
+<br><br>
+However, much of these data columns are messy. The aim of this project is to clean this data ready for analysis. After the data clean up a logistic regression will be performed to determine the odds of flight cancellations in regard to the departure US state. 
+</div>
+
+<div class = "rblock">
+# Import the txt file containing the dataset specifying the delimeters as "|"<br><br>
+NEWDATA<- read.table(<br>file="C:\\Users\\james\\Documents<br>\\flights.txt" <br>
+                   sep="|", <br>            
+                   quote="", <br>               
+                   comment.char="") <br><br>
+
+# Original file is 1,191,806 so take a smaller sample to use for this project<br><br>    
+flights <- NEWDATA[1:30000,]<br><br>
+
+
+# Have a look at the first few variables<br><br>
+head(flights[,1:6])  
+</div>
+
+
+
+<div class = "routput">
+		<img src="C:\Users\jimmy\Documents\GitHub\JamesC845.github.io\head(flights).png">
+</div>
+
+
+<div class = "tblock">
+
+First of all, R hasn't recognised the first row as the column/variable name.
+
+</div>
+
+<div class = "rblock">
+
+# Select the first value of each column to use as the column title<br><br>
+names(flights) <- as.character(unlist(flights[1,]))<br><br>   
+# Then remove the row of the whole data set<br><br>
+flights <- flights[-1,]<br><br>
+
+# See the new variable titles<br><br>
+head(flights[,1:5])
+</div>
+
+
+<div class = "routput">
+		<img src="C:\Users\jimmy\Documents\GitHub\JamesC845.github.io\head(flights)_2.png">
+</div>
+
+
+
+
+<div class = "tblock">
+The DISTANCE variable shows the scheduled flight length but cannot be used in calculations in its current form due to its combination of numbers and characters 
+</div>
+
+<div class = "rblock">
+head(flights$DISTANCE)
+</div>
+<div class = "routput">
+		<img src="C:\Users\jimmy\Documents\GitHub\JamesC845.github.io\head(flights$DISTANCE).png">
+</div>
+
+
+<div class = "rblock">
+
+# Replace the "miles" with absence of a character ("")<br><br>
+flights$DISTANCE <- gsub("miles", "", flights$DISTANCE)<br><br>
+# Replace the remaining white space (" ") with absence of a character ("")<br><br>
+flights$DISTANCE <- gsub(" ", "", flights$DISTANCE)   
+</div>
+
+
+<div class = "tblock">
+Say time of day  needed to be used as a predictor variable, more specifically whether flights leaving in the AM or PM have an effect on a response variable, then we would need to use the departure times to create a new AM/PM variable. 
+</div>
+<div class = "rblock">
+# Cheack the departure times variables<br><br>
+head(flights$DEPTIME)
+</div>
+<div class = "routput">
+		<img src="C:\Users\jimmy\Documents\GitHub\JamesC845.github.io\head(flights$DEPTIME).png">
+</div>
+<div class = "rblock">
+# Coerce into a number variables<br><br>
+flights$DEPTIME <- as.numeric(flights$DEPTIME)<br><br>  
+# Create the new variable name followed the requirements for the new value <br><br>
+# In these commands the requirements are where times are before or after noon they are coded as AM or PM respectively in the new column  <br><br>
+flights$AMPMDEP[flights$DEPTIME >= 1200] <- "PM"  <br>      
+flights$AMPMDEP[flights$DEPTIME <= 1200] <- "AM"  <br><br>
+# Coerce the new variable into as a factor <br><br>
+flights$AMPMDEP <- as.factor(flights$AMPMDEP)   
+</div>
+
+
+
+<div class = "tblock">
+Now all departure times will have an AM or PM value in a new column. <br><br>
+
+That's it for miscellaneous data clean up. <br><br>
+
+Now its time to start the Logistic Regression. <br><br>
+
+The research in question is the likelihood of cancellation of flights leaving from certain US states. So the CANCELLED variable will need to be prepared.
+</div>
+
+<div class = "rblock"> 
+# Check the CANCELLED variable <br><br>
+unique(flights$CANCELLED)
+</div>
+<div class = "routput">
+		<img src="C:\Users\jimmy\Documents\GitHub\JamesC845.github.io\unique(flights$CANCELLED).png">
+</div>
+
+<div class = "tblock">
+Logistic Regression is used when the response variable has binomial data. Therefore, the response variable CANCELLED must have values of either 1 or 0, where 1 represents a cancellations and 0 a non-cancellation.
+</div>
+
+<div class = "rblock">
+
+# Must coerce the variable into a character string so "T" and "F" are recognised as letters rather than TRUE/FALSE logical values<br><br>
+flights$CANCELLED <- as.character(flights$CANCELLED)<br><br>
+
+# Identify each possible value in the CANCELLED variable and change it to a binomial value<br><br>
+flights$CANCELLED[flights$CANCELLED == "False"] <- 0 <br>   
+flights$CANCELLED[flights$CANCELLED == "F"] <- 0 <br>       
+flights$CANCELLED[flights$CANCELLED == "T"] <- 1 <br>
+flights$CANCELLED[flights$CANCELLED == "True"] <- 1<br><br>
+
+# Then coerce the resulting variable to a numeric vector<br><br>
+flights$CANCELLED <- as.numeric(flights$CANCELLED)      
+</div>
+
+
+
+
+
+
+
+<div class = "tblock">
+The next step is to perform a training/test split in order to test the data's potential to fit an effective model. <br><br>
+</div>
+
+
+<div class = "rblock">
+# Set the seed so randomly sampled data can be replicated later <br><br>
+
+# Create an 80% size index of the data set <br><br>
+train.index <- sample(1:nrow(flights), 0.8*nrow(flights))
+<br><br><br>
+# Use the index to create an 80% sized training dataset<br><br>
+train.flights <- flights[train.index,] <br><br>
+# Use the index to create a 20% sized testing dataset<br><br> 
+test.flights <- flights[-train.index,]<br><br>
+# Create a Logistic Regression model using the training dataset <br><br>
+train.model <- glm(CANCELLED ~ <br>
+                  ORIGINSTATENAME,<br>
+                data = train.flights,<br>
+                family = "binomial")    <br><br>
+summary(train.model)
+</div>
+
+<div class = "routput">
+		<img src="C:\Users\jimmy\Documents\GitHub\JamesC845.github.io\summary(train.model).png">
+</div>
+
+<div class = "tblock">
+
+Summary of the training model shows a few significant p-values (p < 0.05) whichs suggests there is a significant difference between the likelihood of cancellations when flights depart from different states. <br><br>
+
+The AIC value represents the level of prediction errors, where a higher AIC indicates the model is more likely to make preidction errors.<br><br>
+
+As a general rule, a model of less than 2000 is desirable, therefore the AIC value shown here suggests the final model which will be fitted using 100% of the data could be an ineffective model.<br><br>
+
+However, AIC values are primarily used for comparing different models. Because only one model is being fitted during this project further diagnostics on this model can be made to determine its effectiveness. <br><br>
+
+</div>
+
+
+
+
+
+<div class = "rblock">
+# This command will predict values using parameters from the training model<br><br>
+predict.flights <- predict(train.model, type="response")<br><br><br>
+
+    # This next command will indicate the accuracy of the model predictions by returning the mean of a set of values predicted by the training model using true values from the CANCELLED variable as an index <br><br>
+    # Using this index means only the mean prediction for the true outcomes are calculated<br><br>
+tapply(predict.flights, train.flights$CANCELLED, mean)
+
+</div>
+
+<div class = "routput">
+		<img src="C:\Users\jimmy\Documents\GitHub\JamesC845.github.io\tapply().png">
+</div>
+
+<div class = "tblock">
+
+According to calculation the probability of the model correctly predicting a cancellation is 0.03% and correctly prediciting a non-cancellation is 0.02. <br><br>
+
+Although this suggests the final model would definitely be ineffective, further diagnostics can be performed to test this. <br><br>
+A Receiver Operator Characteristic (ROC) curve  plots the True Positive Rate against the False Positive Rate and can be used in the diagnosis of a Logistic Regression model.
+</div>
+
+
+
+<div class = "rblock">
+
+# Load the ROCR package <br><br>
+library(ROCR)<br><br>
+
+
+# Create the curve using the predicted values and true values<br><br>
+ROCRcurve <- prediction(predict.flights, train.flights$CANCELLED)<br><br> 
+# Create the graph specifying the True Positve Rate ("tpr") and False Positive Rate ("fpr") as axes<br><br>
+ROCRgraph <- performance(ROCRcurve, "tpr", "fpr")<br><br>
+
+plot(ROCRgraph, colorize = T)
+</div>
+
+
+
+
+
+<div class = "plot">
+<img src="C:\Users\jimmy\Documents\GitHub\JamesC845.github.io\plot(ROCRgraph, colorize = T).png"
+alt"alternate text"
+width = 50%
+img style="border: 5px solid purple">
+</div>
+
+
+
+
+<div class = "tblock">
+
+When a plotted ROC crurve leans toward the true positive rate rather then false positive rate (i.e. there is more graph space underneath the curve) this would indicate the model is more likely to make true predictions. <br><br>
+
+Unfortunately, in this case the ROC curve suggests the the model is more likely to make false predictions. <br><br>
+
+A threshold value can be obtained from the ROC curve's threshold spectrum to create a confusion matrix. This is a model diagnosis method that compares true and false values predicted by the training model but can have a threshold value applied to it depending on the type of research question.<br><br>
+
+According to this curve's threhsold spectrum, located on the right side of the plot, a threshold of 0.02-0.08 can be used. <br><br>
+
+In logistic Regression a low threshold is used when predicting true positive values. Since the research question is regarding the occurence of flight cancellations a low threshold will be used.
+</div>
+
+
+
+
+
+
+<div class = "rblock">
+# Create a confusion using a low threshold value of 0.02 taken from the ROC curve<br><br>
+
+CM
+</div>
+
+
+<div class = "routput">
+		<img src="C:\Users\jimmy\Documents\GitHub\JamesC845.github.io\CM.png">
+</div>
+
+<div class = "tblock">
+
+Results from the confusion matrix can be used to calculate the rate of accuracy.
+</div>
+
+
+
+
+
+<div class = "rblock">
+# Accuracy = (True Positives + True Negatives)/Total Values <br><br> 
+(CM[1,2]+CM[2,2])/sum(CM)
+</div>
+
+
+
+<div class = "routput">
+		<img src="C:\Users\jimmy\Documents\GitHub\JamesC845.github.io\CMresult.png">
+</div>
+
+
+<div class = "tblock">
+The result from the accuracy formula idicate that with a low threshold the model is somewhat accurate at approximately 69%. 
+<br><br>
+Since this model has categorical predictor variables the best way to visualise results is by calculating and plotting the proportions of flight calculations departing from each state in the data set.
+</div>
+
+<div class = "rblock">
+
+# Store the proportion of flight cancellations from each state<br><br>
+
+Alabama <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Alabama"] == 1)				<br>
+Alaska <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Alaska"] == 1)				<br>
+California <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="California"] == 1)		<br>
+Georgia <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Georgia"] == 1)				<br>
+Illinois <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Illinois"] == 1)			<br>
+Louisiana <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Louisiana"] == 1)			<br>
+Maine <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Maine"] == 1)					<br>
+Maryland <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Maryland"] == 1)			<br>
+Minnesota <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Minnesota"] == 1)			<br>
+NMexico <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="New Mexico"] == 1)			<br>
+NYork <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="New York"] == 1)				<br>
+Ohio <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Ohio"] == 1)					<br>
+Oregon <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Oregon"] == 1)				<br>
+Texas <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Texas"] == 1)					<br>
+Washington <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Washington"] == 1)		<br><br>
+
+# Then store the proportions in a data frame<br><br>
+cancellation.proportions <- data.frame(<br><br>State = c("Alabama", "Alaska", "California", "Georgia", "Illinois", "Louisiana", "Maine",  "Maryland", "Minnesota", "NMexico", "NYork", "Ohio", "Oregon", "Texas", "Washington"), <br><br>
+
+                                Proportion = c(Alabama, Alaska, California, Georgia, Illinois, Louisiana, Maine, Maryland, Minnesota, NMexico, NYork, Ohio, Oregon, Texas, Washington))
+                                <br><br>
+ 
+# Then plot the proportions in a bar plot
+
+ggplot(cancellation.proportions, aes(x = State, y = Proportion))+
+  geom_bar(stat = "identity", color = "black", fill = "purple4")
+</div>
+
+
+
+
+<div class = "plot">
+<img src="C:\Users\jimmy\Documents\GitHub\JamesC845.github.io\ggplot(proportions).png"
+alt"alternate text"
+width = 65%
+img style="border: 5px solid purple">
+</div>
+
+
+<div class = "tblock">
+It can be seen here that some states have a much higher proportion of cancellations than other states.
+
+The next step is to fit the final model.
+</div>
+
+<div class = "rblock">
+summary(flights.model)
+</div>
+
+
+
+
+<div class = "routput">
+		<img src="C:\Users\jimmy\Documents\GitHub\JamesC845.github.io\summary(flights.model).png">
+</div>
+
+
+<div class = "tblock">
+From the model diagnosistics it was shown that this may not be the best model to use 
+to make predictions. However, with a very low threshold obtained by the ROC curve, the accuracy of the model, calculated using a confusion matrix, is shown to be somewhat high. <br><br>
+
+Furthermore, p-values from the final model's summary statistics show that some flight origin states were signficantly more likely to have cancellations.
+</div>
+
+</body>

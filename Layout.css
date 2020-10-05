@@ -1,6 +1,6 @@
 html, body {
-  width: 1000px;
-  height: 700px;
+  width: ..... ;
+  height: ..... ;
 }
 
 
@@ -8,8 +8,11 @@ body{
 	background:black;
 	font-family:arial;
 	color:white;
-	display:inline;
-	margin:0px;
+	display:block;
+	margin:0px;  
+/*	margin-left:auto;	*/
+/*	margin-right:auto;	*/
+/*	width:960px;		*/
 }
 
 
@@ -19,7 +22,7 @@ body{
 header{
 	background:grey;
 	padding:0px 0px 0px 0px;	
-	margin:0px 0px 0px 0px;
+	margin:0px 0px 50px 0px;
 }
 
 
@@ -55,9 +58,8 @@ nav ul li a {
 	background:black;	
 	padding:0px 30px 0 30px;
 	margin:0px 0px 0px 0px;
+
 }
-
-
 
 
 
@@ -97,9 +99,43 @@ width: 10px;
 height: 20px;
 }
 
+
+
+.tblock{
+	background:black;
+	color:white;
+	font-family:"arial";
+	width:40%;
+	float:center;
+	margin: 20px 20px 40px 40px;
+}
+
 .rblock{
 	background:grey;
 	color:black;
 	font-family:courier;
+	width:40%;
+	margin:30px 30px 30px 80px;
+	padding:10px 0px 20px 10px;
+	float:left-middle;
 }
 
+
+
+.column3{
+	float:left;
+	width:22%;
+	padding: 5px 5px 40px 0pc
+}
+
+
+.routput{
+	float:left-middle;
+	padding: 5px 5px 30px 0pc;
+	margin: 0px 0px 15px 80px;
+}
+
+.plot{
+	float:left-middle;
+	margin: 0px 0px 0px 30px
+}
