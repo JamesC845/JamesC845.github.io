@@ -2,7 +2,7 @@
 
 
 <head>
-	<title>James Churchward's Portfolio</title>
+	<title>Logistic Regression</title>
 		<link rel="stylesheet"
 	type="text/css"
 	href="Layout.css">
@@ -12,7 +12,7 @@
 
 
 
-<body>
+
 
 	<header>
 		<nav>
@@ -27,11 +27,26 @@
 
 
 
+<body>
+
+
+
+
+
+
+
+
+
 <div class = "tblock">
 The Flights dataset contains information on US domestic flights such as departure and arrival times/locations, airports involved etc. 
 <br><br>
 However, much of these data columns are messy. The aim of this project is to clean this data ready for analysis. After the data clean up a logistic regression will be performed to determine the odds of flight cancellations in regard to the departure US state. 
 </div>
+
+
+
+
+
 
 <div class = "rblock">
 # Import the txt file containing the dataset specifying the delimeters as "|"<br><br>
@@ -56,13 +71,14 @@ head(flights[,1:6])
 
 
 <div class = "tblock">
-
 First of all, R hasn't recognised the first row as the column/variable name.
-
 </div>
 
-<div class = "rblock">
 
+
+
+
+<div class = "rblock">
 # Select the first value of each column to use as the column title<br><br>
 names(flights) <- as.character(unlist(flights[1,]))<br><br>   
 # Then remove the row of the whole data set<br><br>
@@ -73,6 +89,10 @@ head(flights[,1:5])
 </div>
 
 
+
+
+
+
 <div class = "routput">
 		<img src="https://jamesc845.github.io/images/head(flights)_2.png">
 </div>
@@ -80,9 +100,14 @@ head(flights[,1:5])
 
 
 
+
+
+
 <div class = "tblock">
 The DISTANCE variable shows the scheduled flight length but cannot be used in calculations in its current form due to its combination of numbers and characters 
 </div>
+
+
 
 <div class = "rblock">
 head(flights$DISTANCE)
@@ -92,6 +117,9 @@ head(flights$DISTANCE)
 </div>
 
 
+
+
+
 <div class = "rblock">
 
 # Replace the "miles" with absence of a character ("")<br><br>
@@ -99,6 +127,9 @@ flights$DISTANCE <- gsub("miles", "", flights$DISTANCE)<br><br>
 # Replace the remaining white space (" ") with absence of a character ("")<br><br>
 flights$DISTANCE <- gsub(" ", "", flights$DISTANCE)   
 </div>
+
+
+
 
 
 <div class = "tblock">
@@ -385,5 +416,8 @@ to make predictions. However, with a very low threshold obtained by the ROC curv
 
 Furthermore, p-values from the final model's summary statistics show that some flight origin states were signficantly more likely to have cancellations.
 </div>
+
+
+
 
 </body>

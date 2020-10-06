@@ -12,7 +12,7 @@
 
 
 
-<body>
+
 
 	<header>
 		<nav>
@@ -25,6 +25,14 @@
 	</header>
 
 
+
+
+
+
+
+
+
+
 <div class="tblock">
 The New York Air Quality Measurements datasets includes measurements of climatic factors taken from different locations around New York city. The climatic factors of interest for this project are ozone, temperature and solar radiation. 
 <br><br>
@@ -33,7 +41,6 @@ Ozone increases in higher temperatures due to high temperatures increasing the s
 Ozone filters solar radiation (measured in Langleys: a unit of radiation named after Samuel Pierpoint Langley), therefore, we are expecting these  variables to have a weak or inversed relationship. 
 <br><br>
 The first step in creating the model is to prepare the data to calculate correlations.
-
 <div>
 
 
@@ -55,7 +62,6 @@ The first step in creating the model is to prepare the data to calculate correla
 <br>
 <br>NA %in% airquality$Temp
 <br>> [1] FALSE
-
 </div>
 
   
@@ -82,9 +88,17 @@ AQ <- subset(AQ, !is.na(AQ$Solar.R))
 
 
 
-<div class"tblock">
+
+
+
+<div class = "tblock">
 The next step is to confirm the correlationsbetween the variables to see whether the expected relationships exist between the variables
 </div>
+
+
+
+
+
 
 
 
@@ -97,7 +111,7 @@ library(ggplot)
 <br><br>
 xy.temp <- ggplot(AQ)+  <br>                            
   geom_point(aes(x = Temp, y = Ozone), <br>
-             color="purple4")+ <br>                                  
+             color="purple4")+ <br>                             
   labs(title = "Correlation: ", <br>
        subtitle = round(cor(AQ$Temp, AQ$Ozone),2)) <br>
 <br><br>
@@ -106,7 +120,10 @@ xy.temp
 
 
 
-YEAH YOU 2
+
+
+
+
 
 
 <div class = "plot">
@@ -118,11 +135,22 @@ border = "5"
 img style="border: 5px solid purple">
 </div>
 
+
+
+
+
 <div class="tblock">
 This shows the correlation between the Temp and Ozone values is strong. As previously mentioned, temperature catalyses the chemical reaction that produces ozone so this was expected.
 <br><br><br>
 The next step is to calculate and visualise the relationship between Solar.R and Ozone.
 </div>
+
+
+
+
+
+
+
 
 <div class="rblock">
 # Same plot created as before but with Solar.R and Ozone variables
@@ -136,12 +164,31 @@ xy.solar <- ggplot(AQ)+                             <br>
 xy.solar
 </div>
 
+
+
+
+
+
+
+
+<div class = "plot">
 <img src="https://jamesc845.github.io/images/xy.solar.png"
 alt"alternate text"
 width = ""
 height = ""
 border = "5"
 img style="border: 5px solid purple">
+</div>
+
+
+
+
+
+
+
+
+
+
 
 <div class="tblock">
 Surprisingly Solar.R and Ozone have a weak positive relationship of 0.35. Although this is unexpected, a model will still be fitted and diagnosed to determine a potential mathematical relationship between these variables. 
@@ -152,11 +199,28 @@ Alternatively, this unexpected finding could be due to a flaw in the dataset. Th
 </div>
 
 
+
+
+
+
+
+
+
+
+
+
 <div class = "tblock">
 The next step is to check for outliers. Outliers are values that are unusually far from other values in a dataset. 
 <br><br>
 A model fitted with outliers that still remain in the data can lead to a model that makes false predictions.
 </div>
+
+
+
+
+
+
+
 
 
 
@@ -193,9 +257,13 @@ bp.ozone								<br>
 
 
 
-<div class = "row">
 
-	<div class = "column3">
+
+
+
+
+<!--<div class = "row">-->
+	<div class = "plot">
 	<img src="https://jamesc845.github.io/images/bp.temp.png"
 alt"alternate text"
 width = "90%"
@@ -204,7 +272,7 @@ border = "5"
 img style="border: 5px solid purple">
 	</div>
 
-	<div class = "column3">
+	<div class = "plot">
 		<img src="https://jamesc845.github.io/images/bp.solar.png"
 alt"alternate text"
 width = "90%"
@@ -213,23 +281,42 @@ border = "5"
 img style="border: 5px solid purple">
 	</div>
 
-	<div class = "column3">
+<div class = "plot">
 		<img src="https://jamesc845.github.io/images/bp.ozone.png"
 alt"alternate text"
 width = "90%"
 height = ""
 border = "5"
 img style="border: 5px solid purple">
-	</div>
-
 </div>
+<!--</div>-->
 
-<br><br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div class = "tblock">
-<br>
 Juding by the boxplots, the only variable with outliers is Ozone. These must be removed.
 </div>
+
+
+
 
 <div class = "rblock">
 # Store the outlier in a new object <br><br>
@@ -239,6 +326,11 @@ AQ.out <- boxplot(AQ$Ozone)$out <br><br>
 # Identify which values in the variable are outliers, take them away from the dataset, then store them as a new dataset <br><br>
 AQ <- AQ[-which(AQ$Ozone %in% AQ.out),]
 </div>
+
+
+
+
+
 
 
 <div class = "tblock">
@@ -471,4 +563,3 @@ This provides further evidence for the efficacy of the model.
 </div>
 
 
-</body>
