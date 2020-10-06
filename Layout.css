@@ -24,7 +24,7 @@ body{
 
 
 header{
-	background:grey;
+	background:#666666;
 	padding:0px 0px 0px 0px;	
 	margin:0px 0px 50px 0px;
 }
@@ -80,6 +80,7 @@ nav ul li a {
 .myrow{
 	background:grey;
 	color:black;
+	width:auto;
 }
 
 .mycol{
@@ -115,7 +116,7 @@ height: 20px;
 }
 
 .rblock{
-	background:grey;
+	background: #666666;
 	color:black;
 	font-family:courier;
 	width:550px;
@@ -141,5 +142,6 @@ height: 20px;
 
 .plot{
 	float:left-middle;
-	margin: 0px 0px 0px 30px
+	margin: 0px 0px 0px 30px;
+
 }
