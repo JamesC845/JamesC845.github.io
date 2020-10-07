@@ -34,13 +34,13 @@
 
 
 <div class="tblock">
-The New York Air Quality Measurements datasets includes measurements of climatic factors taken from different locations around New York city. The climatic factors of interest for this project are ozone, temperature and solar radiation. 
+The New York Air Quality Measurements datasets includes measurements of climatic factors taken from different locations around New York city. The climatic factors of interest for this project are Ozone, Temperature and Solar Radiation. 
 <br><br>
-Ozone increases in higher temperatures due to high temperatures increasing the speed of chemical reactions, therefore, we are expecting ozone (parts per billion) and temperature (Farenheit) measures to have a positive relationship. 
+Ozone increases in higher temperatures due to the temperature speeding up the rate of of chemical reactions. Therefore, we are expecting Ozone (parts per billion) and Temperature (Farenheit) measures to have a positive relationship. 
 <br><br>
-Ozone filters solar radiation (measured in Langleys: a unit of radiation named after Samuel Pierpoint Langley), therefore, we are expecting these  variables to have a weak or inversed relationship. 
+Ozone filters Aolar Radiation (measured in Langleys: a unit of radiation named after Samuel Pierpoint Langley), therefore, we are expecting these  variables to have an inversed relationship. 
 <br><br>
-The first step in creating the model is to prepare the data to calculate correlations.
+The first step in creating the model is to determine whether there is a relationship between the variables. This is done by calculating correlations between the variables; the data must be prepeared before this can be done.
 <div>
 
 
@@ -69,7 +69,7 @@ The first step in creating the model is to prepare the data to calculate correla
 
 
 <div class="tblock">
-The variables Ozone and Solar.R have NAs. The whole rows that have these will need to be excluded so each variable still has same number of values. This way correlations can still be calculated.
+The variables Ozone and Solar.R have NAs. Rows of data that have these will need to be excluded so each variable still has same number of values. This is because correlations require all variables are of the same length.
 </div>
 
 
@@ -77,7 +77,7 @@ The variables Ozone and Solar.R have NAs. The whole rows that have these will ne
 
 
 <div class="rblock">
-# Create a series of subsets that exclude NAs
+# Create a subset that excludes the NAs
 <br><br>
 AQ <- subset(airquality, !is.na(airquality$Ozone))  
 <br>
@@ -92,7 +92,7 @@ AQ <- subset(AQ, !is.na(AQ$Solar.R))
 
 
 <div class = "tblock">
-The next step is to confirm the correlationsbetween the variables to see whether the expected relationships exist between the variables
+The next step is to calculate the correlations between the variables to determine whether the expected relationships exist.
 </div>
 
 
@@ -106,7 +106,7 @@ The next step is to confirm the correlationsbetween the variables to see whether
 # Call the ggplot package
 <br><br>
 library(ggplot)
-<br><br>
+<br><br><br>
 # Use ggplot to create an XY scatter graph with Temp and Ozone variables
 <br><br>
 xy.temp <- ggplot(AQ)+  <br>                            
@@ -114,7 +114,7 @@ xy.temp <- ggplot(AQ)+  <br>
              color="purple4")+ <br>                             
   labs(title = "Correlation: ", <br>
        subtitle = round(cor(AQ$Temp, AQ$Ozone),2)) <br>
-<br><br>
+<br>
 xy.temp		
 </div>
 
@@ -140,9 +140,9 @@ img style="border: 5px solid #4d0099">
 
 
 <div class="tblock">
-This shows the correlation between the Temp and Ozone values is strong. As previously mentioned, temperature catalyses the chemical reaction that produces ozone so this was expected.
-<br><br><br>
-The next step is to calculate and visualise the relationship between Solar.R and Ozone.
+This shows the correlation between the Temp and Ozone variables is strong. As previously mentioned, temperature catalyses the chemical reaction that produces ozone so this was expected.
+<br><br>
+The next step is to calculate and visualise the relationship between the Solar.R and Ozone variables.
 </div>
 
 
@@ -153,7 +153,7 @@ The next step is to calculate and visualise the relationship between Solar.R and
 
 
 <div class="rblock">
-# Same plot created as before but with Solar.R and Ozone variables
+# Same plot created as before but with the Solar.R and Ozone variables
 <br><br>
 xy.solar <- ggplot(AQ)+                             <br>
   geom_point(aes(x = Solar.R, y = Ozone),			<br>		
@@ -193,9 +193,9 @@ img style="border: 5px solid #4d0099">
 <div class="tblock">
 Surprisingly Solar.R and Ozone have a weak positive relationship of 0.35. Although this is unexpected, a model will still be fitted and diagnosed to determine a potential mathematical relationship between these variables. 
 <br><br>
-By doing this, if the model appears to have acceptable diagnostic statistics, despite the variables not showing the expected mathematical relationship, this could lead to a new scientific discovery or at the very least warrant further research into this relationship. 
+By doing this, if the model appears to show acceptable diagnostic statistics, despite the variables not showing the expected mathematical relationship, this could lead to a new scientific discovery or at the very least warrant further research into this relationship. 
 <br><br>
-Alternatively, this unexpected finding could be due to a flaw in the dataset. This will need to be investigated. 
+Alternatively, this unexpected finding could be due to a flaw in the dataset, this will need to be investigated if this is the case. 
 </div>
 
 
@@ -203,7 +203,7 @@ Alternatively, this unexpected finding could be due to a flaw in the dataset. Th
 
 
 
-
+<br>
 
 
 
@@ -212,7 +212,7 @@ Alternatively, this unexpected finding could be due to a flaw in the dataset. Th
 <div class = "tblock">
 The next step is to check for outliers. Outliers are values that are unusually far from other values in a dataset. 
 <br><br>
-A model fitted with outliers that still remain in the data can lead to a model that makes false predictions.
+A model fitted with outliers can lead to a model that makes false predictions.
 </div>
 
 
@@ -227,14 +227,14 @@ A model fitted with outliers that still remain in the data can lead to a model t
 
 <div class = "rblock">
 
-# Create a boxplot for each variable	<br>
+# Create a boxplot for each variable	<br><br>
 
 bp.temp<- ggplot(AQ) +                  <br>
   geom_boxplot(aes(x=Temp), 			<br>	
                color="purple4", 		<br>
                width=2,					<br>
                alpha=0.2)+coord_flip()	<br>
-               							<br><br>
+               							<br>
 bp.solar<- ggplot(AQ) + 				<br>
   geom_boxplot(aes(x=Solar.R), 			<br>
                color="purple4", 		<br>
@@ -319,8 +319,8 @@ Juding by the boxplots, the only variable with outliers is Ozone. These must be 
 
 
 <div class = "rblock">
-# Store the outlier in a new object <br><br>
-AQ.out <- boxplot(AQ$Ozone)$out <br><br>
+# Store the outliersn a new object <br><br>
+AQ.out <- boxplot(AQ$Ozone)$out <br><br><br>
 
 
 # Identify which values in the variable are outliers, take them away from the dataset, then store them as a new dataset <br><br>
@@ -335,9 +335,9 @@ AQ <- AQ[-which(AQ$Ozone %in% AQ.out),]
 
 <div class = "tblock">
 
-The variables that will be used are now outlier free. The next step is to check the distribution of the variables. <br><br>
-To effectively be used in Linear Regression all continuous (mathematical measurement) variables must follow a normal distribution (i.e. when plotted must form a bell curve centered around the mean) and not be highly skewed in any direction. <br><br>
-Variables will be plotted in a density distribution alongside a skewness calculation. 
+The Ozone variable is now outlier free. The next step is to check the distribution of the variables. <br><br>
+To effectively be used in Linear Regression, all continuous (data that can take any value in a specified range - can be infinite) variables must follow a normal distribution (i.e. when plotted must form a bell curve centered around the mean) and not be highly skewed in any direction. <br><br>
+The variables here will be plotted in a density distribution alongside a skewness calculation. 
 
 
 </div>
@@ -349,7 +349,7 @@ Variables will be plotted in a density distribution alongside a skewness calcula
 
 # Call the 'e1071' package <br><br>
 
-library(e1071) <br><br>
+library(e1071) <br><br><br>
 
 # Create density plots with skewness calculations for each variable													<br><br>
 	
@@ -425,10 +425,10 @@ Now that the data is ready to be used in a model, the next step is to fit the mo
 
 <div class = "rblock">
 
-# Fit the model
+# Fit the model <br><br>
 
 AQ.lm <- lm(Ozone~Solar.R+Temp, <br>
-             data = AQ) <br><br>
+             data = AQ) <br><br><br>
 # Call the model's summary statistics <br><br>
 summary(AQ.lm) <br>
 </div>
@@ -442,10 +442,13 @@ summary(AQ.lm) <br>
 
 
 <div class = "tblock">
-The model summary shows the p-values are all below 0.05 suggesting both solar radiation and temperature (predictor variables) affect the amount of ozone (response variable). <br><br>
-The Estimate column shows the amount of predicted change in Ozone when the predictor variable increases by 1 (in their respective values). So judging by this model, it is predicted that whenever Solar Radiation increases by 1 Lang, Ozone increases by 0.04470 ppb and whenever Temperature increases by 1 Fahrenheit Celsius, Ozone increases by  2.22757 ppb. <br><br>
- These paradigms will form the algorithm, provided further diagnostics deem the model acceptable for use. <br><br>
- Because the function of the model is to predict values, a R2 value is calculated. this value shows the correlation (%) between the actual values in the data and values predicted by the model. Therefore, a higher R2 that is closer to 1, suggests the model is better at predicting values. <br><br>
+The model summary shows the p-values are all below 0.05 suggesting both Solar Radiation and Temperature (predictor variables) significantly affect the amount of ozone (response variable). <br><br>
+
+The Estimate column shows the amount of predicted change in Ozone when the predictor variable increases by 1 (in their respective values). So judging by this model, it is predicted that whenever Solar Radiation increases by 1 Lang, Ozone will increase by 0.04470 ppb and whenever Temperature increases by 1 Fahrenheit Celsius, Ozone will increase by  2.22757 ppb. <br><br>
+ These paradigms will form the algorithm provided further diagnostics deem the model acceptable for use. <br><br>
+
+
+ Because the function of the model is to predict values, a R2 value is calculated. this value shows the correlation (%) between the actual values in the dataset and values predicted by the model. Therefore, a higher R2 that is closer to 1, suggests the model is better at predicting values. <br><br>
 
 This model has an R2 of 0.58 - a model with a R2 of at least 0.5 is generally deemed acceptable for use in scientific research.<br><br>
 
@@ -454,26 +457,32 @@ The next step is to perform a training/test split, a method that tests the effec
 
 
 
+
+
+
+
 <div class = "rblock">
-set.seed(7)<br><br>
-# Set a seed so that randomly selected samples can be replicated later 
-<br><br>
-# Create an index that will take a random 80% of the dataset      
+# Set a seed so that randomly selected samples can be replicated later <br><br>
+set.seed(7)<br><br><br>
+
+# Create an index that will select a random 80% of the dataset      
 <br><br>
 train.index <- sample(1:nrow(AQ), 0.8*nrow(AQ)) 
-<br><br>
+<br><br><br>
 # Create a training dataset that will use the 80% of the data specified in the index 
 <br><br>
 train.AQ <- AQ[train.index,] 
-<br><br>          
+<br><br><br>         
 # Create a test dataset that will remove the 80% of data specified in the index leaving 20% of the dataset
 <br><br>        
 test.AQ <- AQ[-train.index,]                      
-<br><br>
-# Create a training model: a model that uses the 80% training dataset
+<br><br><br>
+# Fit a training model: a model that uses the 80% training dataset
 <br><br>
 AQ.train.lm <- lm(Ozone~Solar.R+Temp,<br>
-                    data = train.AQ) <br><br>            
+                    data = train.AQ) <br><br><br>
+                    
+# Show the training model summary statistics <br><br>                              
 summary(AQ.train.lm)
 </div>
 
@@ -484,7 +493,7 @@ summary(AQ.train.lm)
 
 <div class = "tblock">
 Even with 80% data, the low p-value suggets Temp is having a signficiant effect on Ozone. <br><br>
-However the p-value for Solar.R is now above 0.05. The training data version of the model has revealed that the statistical effect the Solar.R has on Ozone is not a strong effect. <br><br>
+However the p-value for Solar.R is now above 0.05. The training data version of the model has revealed that the statistical effect the Solar.R has on Ozone is not a strong one. <br><br>
 This is unsuprising as these variables were originally expected to have an inverse relationship. <br><br>
 Solar.R will now be excluded from the final model. <br><br>
 The next step is to diagnose the model's ability to predict values.
@@ -494,11 +503,14 @@ The next step is to diagnose the model's ability to predict values.
 <div class = "rblock">
 
 # Make predictions using the training model paradigms from the corresponding locations in the 20% test dataset <br><br>
-AQ.pred <- predict(AQ.train.lm, test.AQ)<br><br>
-# Create a dataframe where the first column has actual Ozone values taken from the 20% dataset and the second column has previously predicted values <br><br>
+AQ.pred <- predict(AQ.train.lm, test.AQ)<br><br><br>
+
+# Create a dataframe where the first column has actual Ozone values taken from the 20% dataset and the second column has values we just predicted <br><br>
 actual.preds <- data.frame(cbind(Actual = test.AQ$Ozone, <br>
-                                   Predicted = AQ.pred))
-# Perform a correlation between the actual and predicted values <br>
+                                   Predicted = AQ.pred))<br><br><br>
+
+
+# Perform a correlation between the actual and predicted values <br><br>
 cor(actual.preds)
 </div>
 
@@ -516,14 +528,16 @@ Now to fit the final model without the Solar.R variable.
 
 <div class = "rblock">
 # Fit the final model<br><br>
-final.AQ.model <- lm(Ozone~Temp, data = AQ)<br><br>
+final.AQ.model <- lm(Ozone~Temp, data = AQ)<br><br><br>
 # Create a visualisation of the relationship between the variables including a subtitle with the important diagnostic statistics from the model summary<br><br>
 final.AQ.plot <- ggplot(aq, aes(y=Ozone, x = Temp))+<br>
   geom_point(color = "black")+<br>
   stat_smooth(method="lm", color = "purple4")+<br>
   labs(title = paste("Adjusted R2 = ",signif(summary(final.AQ.model )$adj.r.squared, 5), <br>
                      " Estimate =",signif(summary(final.AQ.model )$coef[2,1], 5),<br>
-                     " P =",signif(summary(final.AQ.model )$coef[2,4], 5))) <br><br>
+                     " P =",signif(summary(final.AQ.model )$coef[2,4], 5))) <br><br><br>
+
+
 plot(final.AQ.plot)
 </div>
 
@@ -540,9 +554,9 @@ img style="border: 5px solid #4d0099">
 
 
 <div class = "tblock">
-The visualisation shows a clear linear relationship between the variables. This plot shows there is a low p-value, an acceptable R2. Furthermore, the estimated change between the two variables is shown here: for every increase of 1  degree fahrenheit there is an estimated increase of 2.4391 ppb in ozone.
+The visualisation shows a clear linear relationship between the variables. This plot shows there is a low p-value and an acceptable R2. Furthermore, the estimated change between the two variables is shown here: for every increase of 1 Degree Fahrenheit there is an estimated increase of 2.4391 ppb in Ozone.
 <br><br>
-In order to throughly test the model and determine its effectiveness an F-Fold Cross-Validation can be performed on the model which uses a technique similar to the 80/20 split.
+In order to throughly test the model and determine its effectiveness, an F-Fold Cross-Validation can be performed on the model which uses a technique similar to the 80/20 split.
 <br><br>
  When this function is performed, a small fraction of the data is selected randomly and stored into a subset, then a new model is built using the larger fraction, then using the predictor variable values from the smaller fraction a set of values are predicted using the paradigms of the model built with the larger fraction.
  <br><br>
@@ -552,10 +566,10 @@ In order to throughly test the model and determine its effectiveness an F-Fold C
 
 <div class = "rblock">
 # Call the 'DAAG' package<br><br>
-     library(DAAG)   <br><br>
+     library(DAAG)   <br><br><br>
 
 
-# Plot the the K-Fold analysis using the same data and formula as the final model, m indicated the number of 'folds'<br><br>     
+# Plot the the K-Fold analysis using the same data and formula as the final model and indicate the number of 'folds' using m <br><br>     
 CVlm(data = AQ, form.lm = Ozone~Temp, m = 4)  
 </div>
 
@@ -570,7 +584,7 @@ img style="border: 5px solid #4d0099">
 </div>
 
 <div class = "tblock">
-The lines of best fits are all parallel to each other suggesting that in every random sample where an analysis is performed, model paradigms similar to the final model are produced.<br><br>
+The lines of best fits are all parallel to each other suggesting that in every random sample and analysis, model paradigms similar to the final model are produced.<br><br>
 This provides further evidence for the efficacy of the model.
 </div>
 

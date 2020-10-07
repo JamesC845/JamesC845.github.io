@@ -34,16 +34,21 @@
 
 
 <div class = "tblock">
-In this project tweets including the word "conservation" and a sample of messages on zoochat.com, a conservation message board, will be text mined and analysed. <br><br>
+In this project Tweets featuring the word "conservation" and a sample of messages from zoochat.com, a conservation message board, will be text mined and analysed. <br><br>
 
-Analysis will determine what the most prevalent conservation topics are spoken about online. <br><br>
+Analysis will determine what the most prevalent conservation topics are being spoken about online. <br><br>
 
 More specifically the following questions will be answered: <br><br>
 <ul>
 	<li> What geographical locations or habitat types are most talked about online in regard to biological conservation? </li> 
-	<li>What animal taxa receive the most conservation effort or public attention? </li>
+	<br>
+	<li>What animal taxa receive the most conservation effort and/or public attention? </li>
+	<br>
 	<li>What public institutions are most associated with conservation?</li>
 </ul>
+
+
+
 <br><br>
 The first step is to mine the HTML files from zoochat.com.
 </div>
@@ -57,8 +62,8 @@ The first step is to mine the HTML files from zoochat.com.
 
 <div class = "rblock">
 # Call the 'Rcrawler' package<br><br>
-library(Rcrawler)<br><br>
-# Add the website URL and specify the directory location<br><br>
+library(Rcrawler)<br><br><br>
+# Add the website URL and specify the download location<br><br>
 Rcrawler(Website = "https://www.zoochat.com/community/",      <br>
          DIR = "C:\\Users\\james\\Documents\\Crawled Pages")
 </div>
@@ -73,9 +78,9 @@ Rcrawler(Website = "https://www.zoochat.com/community/",      <br>
 <div class = "tblock">
 For this project 1% of the zoochat site was crawled and downloaded. <br><br>
 
-The next step is to crawl twitter. Downloading tweets requires permission from the site which can be gained by applying for a developer's site account. <br><br>
+The next step is to crawl Twitter. Downloading Tweets requires permission from the Twitter which can be gained by applying for a developer's site account. <br><br>
 
-Once applied and logged in, four passwords can be produced on the site. These must be included when producing a token to signify permission has been obtained. 
+Once applied and logged in, four passwords can be produced on the site. These must be included when producing a token to signify that permission has been obtained. 
 </div>
 
 
@@ -93,22 +98,27 @@ twitter_tokens <- create_token(app = "JamesC",<br>
                                consumer_key = "",<br>        
                                consumer_secret = "",<br>   
                                access_token = "",<br>       
-                               access_secret = "")<br><br>
+                               access_secret = "")<br><br><br>
 
-# Run the crawler specifying it to download those including the word "conservation"<br><br>
-# This will only mine tweets from 6-9 days prior to running this command <br><br>
+# Run the crawler instructing it to download Tweets that feature the word "conservation"<br><br>
+# This will only mine Tweets from 6-9 days prior to running this command <br><br>
 tweets1 <- search_tweets(q = "conservation", <br>
 							n = 2000)<br><br><br>
 
-# Save the tweets as a character string <br><br>
+# Save the Tweets as a character string <br><br>
 conservtweets <- tweets1$text<br><br><br>
+
 # Save the current working directory path                           <br><br>
 origwd <- getwd()  <br><br><br>
-# Set the working directory as the same folder the crawled files are saved            <br><br>                         
+
+
+# Set the working directory as the same folder where the crawled files are saved            <br><br>                         
 setwd("C:\\Users\\james\\Documents\\Crawled Pages") <br><br> <br>
-# Save the tweets as a txt file into the current working directory (where the crawled files are) <br><br>
+
+
+# Save the Tweets as a txt file in the current working directory (where the crawled files are) <br><br>
 write.table(conservtweets, "Conservation Tweets") <br><br> <br>
-# Put the working directory back      <br><br>
+# Reset the working directory      <br><br>
 setwd(origwd)                                           
 </div>
 
@@ -123,7 +133,7 @@ setwd(origwd)
 
 
 <div class = "tblock">
-Now that all of the files are in the same place, a Corpus (a collection of character strings) can be created and prepared for analysis.
+Now that all of the files are in the same place, a corpus (a collection of text files) can be created and prepared for analysis.
 </div>
 
 
@@ -136,7 +146,7 @@ Now that all of the files are in the same place, a Corpus (a collection of chara
 
 # Call the 'tm' package<br><br>
 
-library(tm)<br><br>
+library(tm)<br><br><br>
 
 
 
@@ -145,12 +155,17 @@ library(tm)<br><br>
 conservdocs <- Corpus(DirSource("C:\\Users\\james\\Documents\\Crawled Pages"))  <br><br><br>
 
 
-# Create a unique function using functions from the 'tm' package where 'x' is the Corpus and 'pattern' is the pattern of text to be removed from the character string <br><br>
+
+
+# Create a unique function using a function from the 'tm' package where 'x' is the corpus name and 'pattern' is the pattern of text to be removed from the character string <br><br>
 
 tospace <- content_transformer(
   function(x, pattern){ 
     return (gsub(pattern, " ", x))
-    })  <br><br><br><br>
+    })  <br><br><br>
+
+
+
 
 
 # The unique 'tospace' function can now be used in a 'tm_map' function from the 'tm' package which is specifically designed to change text in a corpus<br><br>
@@ -184,11 +199,11 @@ HTML code.
 
 # Call the 'qdapRegex' package<br><br>
 
-library(gdapRegex)<br><br>
+library(gdapRegex)<br><br><br>
 
 
-# Store the requirements for the 'rm_between' function into a unique function so it can be used in a 'tm_map' function<br>
-# Any information between '<' and '>' (Where all HTML code will be stored) will be removed when this command is applied<br><br>
+# Store the requirements for the 'rm_between' function into a unique function so it can be used in a 'tm_map' command<br><br>
+# Any information between '<' and '>' (Where all HTML code will be stored) will be removed when this command is applied<br><br> EXAMPLE:<br>
 
 rmbetween <- function(x){ 
   rm_between(x, "<", ">") 
@@ -198,7 +213,7 @@ rmbetween <- function(x){
 
 
 <div class = "tblock">
-Now its time to use these commands to tidy the contents of the corpus
+Now its time to use these commands to tidy the contents of the corpus.
 </div>
 
 
@@ -211,9 +226,9 @@ Now its time to use these commands to tidy the contents of the corpus
 
 # Remove HTML commands<br><br>
 
-conservdocs <- tm_map(conservdocs, rmbetween)<br><br>         
+conservdocs <- tm_map(conservdocs, rmbetween)<br><br><br>         
 
-# Remove common symbols found in HTML
+# Remove common symbols found in HTML<br><br>
 
 conservdocs <- tm_map(conservdocs, tospace, "-")<br>
 conservdocs <- tm_map(conservdocs, tospace, ":")<br>
@@ -255,7 +270,7 @@ conservdocs <- tm_map(conservdocs, removeWords, stopwords("english"))<br><br><br
 
 
 <div class = "tblock">
-Now the text in the Corpus is clean the next step is to coerce and store the corpus as a Document Term Matrix so the text terms can then be listed, ordered and analysed.
+Now the text in the corpus is clean the next step is to coerce and store the corpus as a Document Term Matrix so the text terms can then be listed, ordered and analysed.
 </div>
 
 
@@ -272,19 +287,29 @@ Now the text in the Corpus is clean the next step is to coerce and store the cor
 
 
 <div class = "rblock">
-# Store the corpus as a DTM while setting a minimum and maximum word length to exclude anything missed by the clean up<br>
-# Set a minimum of term frequencies to be included in the DTM - terms occuring 3 times or less are excluded <br><br>
+# Store the corpus as a DTM while setting a minimum and maximum word length to exclude anything missed by the clean up<br><br>
+
+# Also set a minimum of term frequencies to be included in the DTM - terms occuring 3 times or less will be excluded <br><br>
 
 dtmconserv <- DocumentTermMatrix(conservdocs, <br>
 control = list(wordLengths=c(4,20),<br>
 bounds=list(global=c(3, 27)))) <br><br><br>
 
-# Create a list using the DTM using the frequency of terms as a value in the list<br><br>
-freqconserv <- colSums(as.matrix(dtmconserv)) <br><br><br>    
-# Create an index for the list where the most frequent terms appear first <br><br>
+
+
+
+# Create a list using the DTM where one column will have terms and another will have the frequency of terms<br><br>
+freqconserv <- colSums(as.matrix(dtmconserv)) <br><br><br>  
+
+  
+# Create an index for the list indicating that the most frequent terms should appear first <br><br>
 ordconserv <- order(freqconserv, decreasing = T)<br><br><br>
+
+
  # Apply the index    <br><br>
-freqconserv <-  freqconserv[ordconserv] <br><br>               
+freqconserv <-  freqconserv[ordconserv] <br><br><br>
+               
+# Call a sample of the list <br><br>
 
 freqconserv[1:32]
 </div>
@@ -301,14 +326,14 @@ freqconserv[1:32]
 <div class = "tblock">
 This shows a small sample of the list. Text Mining and analysis is an interative process and will usually involve manual removal of unwanted terms. <br><br>
 
-For example the sample list shows the stop word, "also" and part of a HTML command, "uarr", have slipped through. <br><br>
+For example the sample list shows the stop word "also" and part of a HTML command "uarr", have slipped through. <br><br>
 </div>
 
 
 <div class = "rblock">
 # Coerce the list as a matrix <br><br>
 
-freqconserv <- as.matrix(freqconserv) <br><br>
+freqconserv <- as.matrix(freqconserv) <br><br><br>
     
 # Locate the unwanted term's place in the list and remove <br><br>
 
@@ -323,7 +348,7 @@ freqconserv <- freqconserv[-28, 1]
 
 
 <div class = "tblock">
-Now we have a term list that can be manually analysed for terms based on the research questions. Visualisations can also be created
+Now we have a term list that can be manually analysed for terms based on the research questions. Visualisations can also be created.
 </div>
 
 
@@ -335,6 +360,8 @@ Now we have a term list that can be manually analysed for terms based on the res
 # Call the 'wordcloud' package <br><br>
 
 library(wordcloud) <br><br>
+
+# Create the word cloud specifying the colours and plotting
 
 wordcloud(names(freqconserv), <br>
           freqconserv,<br>
@@ -359,9 +386,9 @@ img style="border: 5px solid #4d0099">
 
 
 <div class = "tblock">
-Here a word cloud shows the most frequent words as the largest and less frequent as smaller. Unsurprisingly "conservation" occurs the most as well as well-known locations.<br><br>
+Here a word cloud represents the most frequent words as larger and less frequent as smaller. Unsurprisingly "conservation" occurs the most as well as well-known locations.<br><br>
 
-Animal taxa names and other terms related to this subject area, such as  "biodiversity" are shown to occur frequently also. <br><br>
+Animal taxa names and other terms related to this subject, such as  "biodiversity", are also shown to occur frequently. <br><br>
 
 An unfamiliar term that occurred frequently was "vogelcommando", a quick internet search revealed this is a user-name that posts frequently on the zoochat website. <br><br>
 
@@ -395,7 +422,8 @@ taxaterms <- data.frame(Term = c("bird","rhino","chlidonias", "birds", "gorilla"
                         Occurences = c(121, 105, 105, 73, 64, 63, 54)) <br> <br>
 # Create the plots <br><br>
 plot1 <- ggplot(taxaterms,  aes(Term, Occurences)) <br>
-plot1 <- plot1 + geom_bar(stat="identity",  fill = "purple4") +ggtitle("Frequency of Taxa Terms") <br>
+plot1 <- plot1 + geom_bar(stat="identity",  fill = "purple4") +ggtitle("Frequency of Taxa Terms") <br><br>
+
 plot1
 </div>
 
@@ -416,14 +444,16 @@ img style="border: 5px solid #4d0099">
 
 
 <div class = "tblock">
-This reveals what animal taxa are being spoken about most in conservation recently, which can either suggest which taxa are more popular among people or have received the most conservation effort recently. <br><br>
+This reveals what animal taxa are being spoken about most recently in the context of conservation. This can either suggest which taxa are more popular among people or have received the most conservation effort recently. <br><br>
 
-The term "bird", "birds" and "chlidonias" (a genus of bird) occur very frequently. The specific use of taxa name "chlidonias" suggests that specific conservation plans have been spoken about these taxa recently. <br><br>
+The term "bird", "birds" and "chlidonias" (a genus of bird) occur very frequently. The specific use of taxa name "chlidonias" suggests that this taxa has been discussed in scientific context alot recently.<br><br>
+
+
 
 General taxa names such as "butterfly", "gorilla" and "reptile" suggest these taxa have been popular among the public and conservationists recently. <br><br>
 
 
-"Rhino" has also occurred frequently and is likely due to the recent International Rhino Day on 22/09/2020.
+"Rhino" has also occurred frequently and is likely due to the recent International Rhino Day on 22/09/2020 (sites were crawled 24/09/2020).
 </div>
 
 
@@ -453,7 +483,7 @@ geolocterms <- data.frame(Terms = c("australia", "africa", "zealand","europe",  
 
 # Create the plots <br><br>
 plot2 <- ggplot(geolocterms,   aes(Terms, Occurences)) <br>
-plot2 <- plot2 + geom_bar(stat="identity", fill = "purple4") +ggtitle("Frequency of Geographical Location Terms")<br>
+plot2 <- plot2 + geom_bar(stat="identity", fill = "purple4") +ggtitle("Frequency of Geographical Location Terms")<br><br>
 plot2
 </div>
 
@@ -470,7 +500,7 @@ img style="border: 5px solid #4d0099">
 
 <div class = "tblock">
 
-This histogram shows the frequency of country and continent terms (it should be noted for more detailed analyses cities, provinces and states would be included too). The minimum frequency threshold was lowered from 50 to 30 for this analysis as only two locations were found originally. <br><br>
+This histogram shows the frequency of country and continent terms (it should be noted for more detailed analyses cities, provinces and states would be included too). The minimum frequency threshold was lowered from 50 to 30 for this analysis as only two locations originally qualified. <br><br>
 
 The popularity of these locations is unsurprising due to the biodiversity in these tropical locations (assuming the term "america" is also referring to south America) and the first world (or 'well developed' where Fiji is concerned) status of these locations. <br><br>
 
@@ -507,8 +537,8 @@ envirolocterms <- data.frame(Terms = c("island", "marine", "islands","forest","w
 # Create the plots <br><br>
                              
 plot3 <- ggplot(envirolocterms,   aes(Terms, Occurences)) <br>
-plot3 <- plot3 + geom_bar(stat="identity", fill = "purple4") +ggtitle("Frequency of Habitat Terms")<br>
-plot3<br>
+plot3 <- plot3 + geom_bar(stat="identity", fill = "purple4") +ggtitle("Frequency of Habitat Terms")<br><br>
+plot3
 </div>
 
 
@@ -527,7 +557,7 @@ The high frequency of marine words ("island", "islands", "marine", "ocean", "wat
 with marine conservation. <br><br>
 
 
-This finding coupled with the fact no sea animal terms occurred more frequently than 50 times and did not appear in the taxa histogram suggests people are concerned with saving the ocean in general rather saving specific marine species.
+This finding coupled with the fact no sea animal terms occurred more frequently than 50 times (refer to the taxa histogram)suggests that people are more concerned with saving the ocean in general rather saving specific marine species.
 </div>
 
 
@@ -545,8 +575,12 @@ This finding coupled with the fact no sea animal terms occurred more frequently 
 
 
 <div class = "rblock">
+# Create a data frame with the institution terms and corresponding frequencies <br><br>
+
 institterms <- data.frame(Terms = c("aquarium", "centre", "museum", "sanctuary", "school", "safari", "gardens", "reserve", "building"),<br>
                           Occurences = c( 274 ,  149 ,  143 ,  120 ,  113 ,  109 ,  88 ,  65 ,  55 ))<br><br>
+
+                          # Create the plots<br><br>
 plot4 <- ggplot(institterms, aes(Terms, Occurences))
 plot4 <- plot5 + geom_bar(stat = "identity", fill = "purple4") +ggtitle("Frequency of Institution Terms")<br><br>
 plot4
@@ -560,27 +594,27 @@ img style="border: 5px solid #4d0099">
 </div>
 
 <div class = "tblock">
-This shows the frequency of times a conservation related institution was mentioned. <br><br>
+This shows the number of times a conservation related institution was mentioned. <br><br>
 
-The term "aquarium" appeared much more frequently than any other institution term which suggests people in general are both aware of the association between aquariums and marine conservation. Furthermore, this likely shows people are more concerned with marine conservation. <br><br>
+The term "aquarium" appeared much more frequently than any other institution term. This suggests that people in general are aware of the association between aquariums and marine conservation. Furthermore, this could show people are highly concerned with marine conservation. <br><br>
 
 An interesting finding is the lack of the term "zoo". This could be due to the tendency for twitter users to only use the word "zoo" in a hashtag (e.g "#ChesterZoo), the lack of spacing in this example would mean the text mining method will not identify "zoo" as an individual term. This is a drawback of the text mining method. <br><br>
 
- Another possibility is due to the public's perceptions of zoos. Zoos tend to be seen by the general public as a place for commercial entertainment and/or a "prison for animals". It is not common knowledge that zoos are a hub for conservation activities such as rescue, breeding and research and this could suggest the lack of frequency of this term.  
+ Another possibility is due to the public's perceptions of zoos. Zoos tend to be seen by the general public as a place for commercial entertainment and/or a "prison for animals". It is not common knowledge that zoos are a hub for conservation activities such as rescue, breeding and research. This could be the reason for the low frequency of this term.  
 </div>
 
 
 
 
 
-
+<br><br>
 
 
 
 <div class = "tblock">
 A Text Mining function can be used to determine the correlation between words, in this context this is the likelihood of one term appearing in the same document as another word.  <br><br>
 
-This can be used to answer many interesting questions and will be used here to discover which countries are most strongly associated with captive breeding programmes when this topic is spoken about online.
+This can be used to answer many interesting questions and will be used here to discover which countries are most strongly associated with captive breeding programmes online.
 </div>
 
 
@@ -595,24 +629,25 @@ This can be used to answer many interesting questions and will be used here to d
 
 # Return a list of words associated with "breeding" with correlations stronger than 0.3 <br><br>
 
-findAssocs(dtmconserv, "breeding", 0.3)   <br><br>
+findAssocs(dtmconserv, "breeding", 0.3)   <br><br><br>
 
-# Manually indentify the country terms and correlation values and manually create objects containing this information <br><br>
+# Manually indentify the country terms and correlation values then create objects containing this information <br><br>
 
-bterms <- c("japan", "bahamas", "barbados", "belize", "costa",  "hong", "mauritius", "monaco", "uganda", "panama",  "singapore", "antigua", "argentina",  "armenia", "cambodia", "china", "australia",  "philippines",  "indonesia", "fiji",    "france",   "madagascar", "papau"    )<br>
+bterms <- c("japan", "bahamas", "barbados", "belize", "costa",  "hong", "mauritius", "monaco", "uganda", "panama",  "singapore", "antigua", "argentina",  "armenia", "cambodia", "china", "australia",  "philippines",  "indonesia", "fiji",    "france",   "madagascar", "papau"    )<br><br>
 bprobs <- c(0.7, 0.60, 0.60, 0.60, 0.60, 0.60, 0.60, 0.60, 0.60, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.4, 0.4, 0.3, 0.3, 0.4, 0.4, 0.3  , 0.3)<br><br><br>
 
-# Call the 'igraph' package to visualise the correlations <br><br>
+# Call the 'igraph' package to use to visualise the correlations <br><br>
 
-library(igraph) <br><br>
+library(igraph) <br><br><br>
                         
-                      
+# Create a data frame with the country terms and corresponding correlation values <br><br>                      
                                         
-b_df <- data.frame(terms = bterms, probs = bprobs)<br>
+b_df <- data.frame(terms = bterms, probs = bprobs)<br><br><br>
+
+# Create the visualisation<br><br>
+
 b_g <- graph.data.frame(b_df, <br>
                         directed = F)  <br><br>
-
-# Plot the correlations <br><br>
 
 plot(b_g, main = "'breeding'")                         
 </div>
@@ -629,14 +664,14 @@ img style="border: 5px solid #4d0099">
 
 
 
+<br>
 
 
-
-<div>
+<div class = "tblock">
 This shows the correlations between country terms and the term "breeding" and could suggest which countries are most strongly associated with breeding programmes <br><br>
 
-However, there are drawbacks of answering questions using this method. In this instance "breeding" wasn't always referring to breeding programmes but were sometimes referring to breeding monkeys for testing in Mauritius or commercial swine breeding in the Bahamas. <br><br>
-
-
-
+However, there are drawbacks of answering questions using this method. In this instance "breeding" wasn't always referring to breeding programmes but were sometimes referring to the breeding of monkeys for testing in Mauritius or commercial swine breeding in the Bahamas. <br><br>
 </div>
+
+
+<br><br>

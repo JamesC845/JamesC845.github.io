@@ -143,5 +143,12 @@ height: 20px;
 .plot{
 	float:left-middle;
 	margin: 0px 0px 0px 30px;
+}
+
+
+
+.homeheader{
+	float:middle;
+	margin:0px 0px 0px 40px;
 
 }
