@@ -34,7 +34,7 @@
 
 
 <div class="tblock">
-The New York Air Quality Measurements datasets includes measurements of climatic factors taken from different locations around New York city. The climatic factors of interest for this project are Ozone, Temperature and Solar Radiation. 
+The New York Air Quality Measurements dataset includes measurements of climatic factors taken from different locations around New York city. The climatic factors of interest for this project are Ozone, Temperature and Solar Radiation. 
 <br><br>
 Ozone increases in higher temperatures due to the temperature speeding up the rate of of chemical reactions. Therefore, we are expecting Ozone (parts per billion) and Temperature (Farenheit) measures to have a positive relationship. 
 <br><br>
@@ -140,7 +140,7 @@ img style="border: 5px solid #4d0099">
 
 
 <div class="tblock">
-This shows the correlation between the Temp and Ozone variables is strong. As previously mentioned, temperature catalyses the chemical reaction that produces ozone so this was expected.
+This shows that the correlation between the Temp and Ozone variables is strong. As previously mentioned, temperature catalyses the chemical reaction that produces Ozone so this was expected.
 <br><br>
 The next step is to calculate and visualise the relationship between the Solar.R and Ozone variables.
 </div>
@@ -195,7 +195,7 @@ Surprisingly Solar.R and Ozone have a weak positive relationship of 0.35. Althou
 <br><br>
 By doing this, if the model appears to show acceptable diagnostic statistics, despite the variables not showing the expected mathematical relationship, this could lead to a new scientific discovery or at the very least warrant further research into this relationship. 
 <br><br>
-Alternatively, this unexpected finding could be due to a flaw in the dataset, this will need to be investigated if this is the case. 
+Alternatively, this unexpected finding could simply be due to a flaw in the dataset.
 </div>
 
 
@@ -442,7 +442,7 @@ summary(AQ.lm) <br>
 
 
 <div class = "tblock">
-The model summary shows the p-values are all below 0.05 suggesting both Solar Radiation and Temperature (predictor variables) significantly affect the amount of ozone (response variable). <br><br>
+The model summary shows the p-values are all below 0.05 suggesting both Solar Radiation and Temperature (predictor variables) significantly affect the amount of Ozone (response variable). <br><br>
 
 The Estimate column shows the amount of predicted change in Ozone when the predictor variable increases by 1 (in their respective values). So judging by this model, it is predicted that whenever Solar Radiation increases by 1 Lang, Ozone will increase by 0.04470 ppb and whenever Temperature increases by 1 Fahrenheit Celsius, Ozone will increase by  2.22757 ppb. <br><br>
  These paradigms will form the algorithm provided further diagnostics deem the model acceptable for use. <br><br>
@@ -556,9 +556,9 @@ img style="border: 5px solid #4d0099">
 <div class = "tblock">
 The visualisation shows a clear linear relationship between the variables. This plot shows there is a low p-value and an acceptable R2. Furthermore, the estimated change between the two variables is shown here: for every increase of 1 Degree Fahrenheit there is an estimated increase of 2.4391 ppb in Ozone.
 <br><br>
-In order to throughly test the model and determine its effectiveness, an F-Fold Cross-Validation can be performed on the model which uses a technique similar to the 80/20 split.
+In order to thoroughly test the model and determine its effectiveness, an F-Fold Cross-Validation can be performed on the model which uses a technique similar to the 80/20 split.
 <br><br>
- When this function is performed, a small fraction of the data is selected randomly and stored into a subset, then a new model is built using the larger fraction, then using the predictor variable values from the smaller fraction a set of values are predicted using the paradigms of the model built with the larger fraction.
+ When this function is performed, a small fraction of the data is selected randomly and stored into a subset, a new model is built using the larger fraction, then using the predictor variable values from the smaller fraction a set of values are predicted using the paradigms of the model built with the larger fraction.
  <br><br>
  These predicted values are then plotted with lines of best fit.  
 </div>
