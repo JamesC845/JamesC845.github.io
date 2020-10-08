@@ -9,7 +9,7 @@ html, body, {
 
 
 body{
-	background:black;
+	background:#0d0d0d;
 	font-family:arial;
 	color:white;
 	display:block;
@@ -31,7 +31,7 @@ header{
 
 
 header h1{
-	color:black;
+	color:#0d0d0d;
 	background:none;
 	display:inline;
 	padding:10px 10px 10px 10px;
@@ -48,7 +48,7 @@ nav ul {
 
 
 nav ul li{
-	background:black;
+	background:#0d0d0d;
 	display:inline-block;
 	list-style-type:none;
 	color:white;
@@ -59,7 +59,7 @@ nav ul li{
 
 nav ul li a {
 	color:white;
-	background:black;	
+	background:#0d0d0d;	
 	padding:0px 30px 0 30px;
 	margin:0px 0px 0px 0px;
 
@@ -107,7 +107,7 @@ height: 20px;
 
 
 .tblock{
-	background:black;
+	background:#0d0d0d;
 	color:white;
 	font-family:"arial";
 	width:60%;
@@ -123,6 +123,7 @@ height: 20px;
 	margin:30px 30px 30px 80px;
 	padding:10px 0px 20px 10px;
 	float:left-middle;
+	border-radius: 5px;
 }
 
 
@@ -138,11 +139,13 @@ height: 20px;
 	float:left-middle;
 	padding: 5px 5px 30px 0pc;
 	margin: 0px 0px 15px 80px;
+	border-radius: 5px;
 }
 
 .plot{
 	float:left-middle;
 	margin: 0px 0px 0px 30px;
+	border-radius: 50px;
 }
 
 
