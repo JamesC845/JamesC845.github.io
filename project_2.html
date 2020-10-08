@@ -374,21 +374,21 @@ Since this model uses categorical predictor variables, the best way to visualise
 
 # Store the proportion of flight cancellations from each state<br><br>
 
-Alabama <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Alabama"] == 1)				<br>
-Alaska <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Alaska"] == 1)				<br>
-California <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="California"] == 1)		<br>
-Georgia <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Georgia"] == 1)				<br>
-Illinois <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Illinois"] == 1)			<br>
-Louisiana <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Louisiana"] == 1)			<br>
-Maine <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Maine"] == 1)					<br>
-Maryland <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Maryland"] == 1)			<br>
-Minnesota <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Minnesota"] == 1)			<br>
-NMexico <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="New Mexico"] == 1)			<br>
-NYork <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="New York"] == 1)				<br>
-Ohio <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Ohio"] == 1)					<br>
-Oregon <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Oregon"] == 1)				<br>
-Texas <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Texas"] == 1)					<br>
-Washington <- mean(flights$CANCELLED[flights$ORIGINSTATENAME=="Washington"] == 1)		<br><br><br>
+Alabama <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Alabama"] == 1)	<br>			
+Alaska <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Alaska"] == 1)<br>				
+California <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="California"] == 1)	<br>	
+Georgia <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Georgia"] == 1)	<br>			
+Illinois <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Illinois"] == 1)	<br>		
+Louisiana <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Louisiana"] == 1)	<br>		
+Maine <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Maine"] == 1)					
+<br>Maryland <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Maryland"] == 1)			
+<br>Minnesota <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Minnesota"] == 1)			
+<br>NMexico <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="New Mexico"] == 1)			
+<br>NYork <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="New York"] == 1)				
+<br>Ohio <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Ohio"] == 1)					
+<br>Oregon <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Oregon"] == 1)				
+<br>Texas <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Texas"] == 1)					
+<br>Washington <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Washington"] == 1)		<br><br><br>
 
 # Then store the proportions in a data frame<br><br>
 cancellation.proportions <- data.frame(<br><br>State = c("Alabama", "Alaska", "California", "Georgia", "Illinois", "Louisiana", "Maine",  "Maryland", "Minnesota", "NMexico", "NYork", "Ohio", "Oregon", "Texas", "Washington"), <br><br>
