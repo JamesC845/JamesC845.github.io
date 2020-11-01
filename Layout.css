@@ -127,6 +127,16 @@ height: 20px;
 }
 
 
+.sectionheader {
+  background:#0d0d0d;
+  padding: 60px;
+  text-align: left-middle;
+  color: white;
+  font-size: 30px;
+  font-family:"arial";
+}
+
+
 
 .column3{
 	float:left;
@@ -145,7 +155,7 @@ height: 20px;
 
 .plot{
 	float:left-middle;
-	margin: 0px 0px 0px 30px;
+	margin: 80px 80px 80px 80px;
 	border-radius: 50px;
 }
 

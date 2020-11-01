@@ -16,7 +16,7 @@
 
 	<header>
 		<nav>
-		<h1>Linear Regression Project - Ozone</h1>
+		<h1>Linear Regression - Ozone Measurements</h1>
 			<ul>
 				<li><a href="index.html"><b>Home</b></a></li>
 				<li><a href="Projects.html"> <b>Projects</b></a></li>
@@ -52,7 +52,7 @@ The first step in creating the model is to determine whether there is a relation
 
 
 <div class="rblock">
-# Check for missing values (NA) in each variable that will be used
+<b># Check for missing values (NA) in each variable that will be used </b>
 <br>
 <br>NA %in% airquality$Ozone           
 <br>> [1] TRUE                  
@@ -77,7 +77,7 @@ The variables Ozone and Solar.R have NAs. Rows of data that have these will need
 
 
 <div class="rblock">
-# Create a subset that excludes the NAs
+<b># Create a subset that excludes the NAs </b>
 <br><br>
 AQ <- subset(airquality, !is.na(airquality$Ozone))  
 <br>
@@ -103,11 +103,11 @@ The next step is to calculate the correlations between the variables to determin
 
 
 <div class="rblock">
-# Call the ggplot package
+<b># Call the ggplot package</b>
 <br><br>
 library(ggplot)
 <br><br><br>
-# Use ggplot to create an XY scatter graph with Temp and Ozone variables
+<b># Use ggplot to create an XY scatter graph with Temp and Ozone variables</b>
 <br><br>
 xy.temp <- ggplot(AQ)+  <br>                            
   geom_point(aes(x = Temp, y = Ozone), <br>
@@ -153,7 +153,7 @@ The next step is to calculate and visualise the relationship between the Solar.R
 
 
 <div class="rblock">
-# Same plot created as before but with the Solar.R and Ozone variables
+<b># Same plot created as before but with the Solar.R and Ozone variables</b>
 <br><br>
 xy.solar <- ggplot(AQ)+                             <br>
   geom_point(aes(x = Solar.R, y = Ozone),			<br>		
@@ -227,7 +227,7 @@ A model fitted with outliers can lead to a model that makes false predictions.
 
 <div class = "rblock">
 
-# Create a boxplot for each variable	<br><br>
+<b># Create a boxplot for each variable</b>	<br><br>
 
 bp.temp<- ggplot(AQ) +                  <br>
   geom_boxplot(aes(x=Temp), 			<br>	
@@ -319,11 +319,11 @@ Juding by the boxplots, the only variable with outliers is Ozone. These must be 
 
 
 <div class = "rblock">
-# Store the outliersn a new object <br><br>
+<b># Store the outliersn a new object </b> <br><br>
 AQ.out <- boxplot(AQ$Ozone)$out <br><br><br>
 
 
-# Identify which values in the variable are outliers, take them away from the dataset, then store them as a new dataset <br><br>
+<b># Identify which values in the variable are outliers, take them away from the dataset, then store them as a new dataset </b> <br><br>
 AQ <- AQ[-which(AQ$Ozone %in% AQ.out),]
 </div>
 
@@ -347,11 +347,11 @@ The variables here will be plotted in a density distribution alongside a skewnes
 
 <div class = "rblock">
 
-# Call the 'e1071' package <br><br>
+<b># Call the 'e1071' package </b> <br><br>
 
 library(e1071) <br><br><br>
 
-# Create density plots with skewness calculations for each variable													<br><br>
+<b># Create density plots with skewness calculations for each variable	</b>												<br><br>
 	
 plot(density(AQ$Temp), main="Density Plot: Temperature", <br>		ylab="Frequency", calculation for each variable			<br>		
      sub=paste("Skewness:", round(skewness(AQ$Temp), 2)))  	<br>	
@@ -425,12 +425,12 @@ Now that the data is ready to be used in a model, the next step is to fit the mo
 
 <div class = "rblock">
 
-# Fit the model <br><br>
+<b># Fit the model </b> <br><br>
 
 AQ.lm <- lm(Ozone~Solar.R+Temp, <br>
              data = AQ) <br><br><br>
-# Call the model's summary statistics <br><br>
-summary(AQ.lm) <br>
+<b># Call the model's summary statistics </b> <br><br>
+summary(AQ.lm) </b> <br>
 </div>
 
 
@@ -462,27 +462,27 @@ The next step is to perform a training/test split, a method that tests the effec
 
 
 <div class = "rblock">
-# Set a seed so that randomly selected samples can be replicated later <br><br>
+<b># Set a seed so that randomly selected samples can be replicated later </b> <br><br>
 set.seed(7)<br><br><br>
 
-# Create an index that will select a random 80% of the dataset      
+<b># Create an index that will select a random 80% of the dataset   </b>  
 <br><br>
 train.index <- sample(1:nrow(AQ), 0.8*nrow(AQ)) 
 <br><br><br>
-# Create a training dataset that will use the 80% of the data specified in the index 
+<b># Create a training dataset that will use the 80% of the data specified in the index  </b>
 <br><br>
 train.AQ <- AQ[train.index,] 
 <br><br><br>         
-# Create a test dataset that will remove the 80% of data specified in the index leaving 20% of the dataset
+<b># Create a test dataset that will remove the 80% of data specified in the index leaving 20% of the dataset </b>
 <br><br>        
 test.AQ <- AQ[-train.index,]                      
 <br><br><br>
-# Fit a training model: a model that uses the 80% training dataset
+<b># Fit a training model: a model that uses the 80% training dataset </b>
 <br><br>
 AQ.train.lm <- lm(Ozone~Solar.R+Temp,<br>
                     data = train.AQ) <br><br><br>
                     
-# Show the training model summary statistics <br><br>                              
+<b># Show the training model summary statistics </b> <br><br>                              
 summary(AQ.train.lm)
 </div>
 
@@ -502,15 +502,15 @@ The next step is to diagnose the model's ability to predict values.
 
 <div class = "rblock">
 
-# Make predictions using the training model paradigms from the corresponding locations in the 20% test dataset <br><br>
+<b># Make predictions using the training model paradigms from the corresponding locations in the 20% test dataset </b> <br><br>
 AQ.pred <- predict(AQ.train.lm, test.AQ)<br><br><br>
 
-# Create a dataframe where the first column has actual Ozone values taken from the 20% dataset and the second column has values we just predicted <br><br>
+<b># Create a dataframe where the first column has actual Ozone values taken from the 20% dataset and the second column has values we just predicted  </b> <br><br>
 actual.preds <- data.frame(cbind(Actual = test.AQ$Ozone, <br>
                                    Predicted = AQ.pred))<br><br><br>
 
 
-# Perform a correlation between the actual and predicted values <br><br>
+<b># Perform a correlation between the actual and predicted values </b> <br><br>
 cor(actual.preds)
 </div>
 
@@ -527,9 +527,9 @@ Now to fit the final model without the Solar.R variable.
 
 
 <div class = "rblock">
-# Fit the final model<br><br>
+<b># Fit the final model </b> <br><br>
 final.AQ.model <- lm(Ozone~Temp, data = AQ)<br><br><br>
-# Create a visualisation of the relationship between the variables including a subtitle with the important diagnostic statistics from the model summary<br><br>
+<b> # Create a visualisation of the relationship between the variables including a subtitle with the important diagnostic statistics from the model summary </b> <br><br>
 final.AQ.plot <- ggplot(aq, aes(y=Ozone, x = Temp))+<br>
   geom_point(color = "black")+<br>
   stat_smooth(method="lm", color = "purple4")+<br>
@@ -565,11 +565,11 @@ In order to thoroughly test the model and determine its effectiveness, an F-Fold
 
 
 <div class = "rblock">
-# Call the 'DAAG' package<br><br>
+<b># Call the 'DAAG' package </b>  <br><br>
      library(DAAG)   <br><br><br>
 
 
-# Plot the the K-Fold analysis using the same data and formula as the final model and indicate the number of 'folds' using m <br><br>     
+<b> # Plot the the K-Fold analysis using the same data and formula as the final model and indicate the number of 'folds' using m </b> <br><br>     
 CVlm(data = AQ, form.lm = Ozone~Temp, m = 4)  
 </div>
 

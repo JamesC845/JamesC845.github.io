@@ -16,7 +16,7 @@
 
 	<header>
 		<nav>
-		<h1>Text Mining Project - Conservation</h1>
+		<h1>Text Mining - Conservation in Social Media</h1>
 			<ul>
 				<li><a href="index.html"><b>Home</b></a></li>
 				<li><a href="Projects.html"> <b>Projects</b></a></li>
@@ -61,9 +61,9 @@ The first step is to mine the HTML files from zoochat.com.
 
 
 <div class = "rblock">
-# Call the 'Rcrawler' package<br><br>
+<b># Call the 'Rcrawler' package</b><br><br>
 library(Rcrawler)<br><br><br>
-# Add the website URL and specify the download location<br><br>
+<b># Add the website URL and specify the download location</b><br><br>
 Rcrawler(Website = "https://www.zoochat.com/community/",      <br>
          DIR = "C:\\Users\\james\\Documents\\Crawled Pages")
 </div>
@@ -92,7 +92,7 @@ Once applied and logged in, four passwords can be produced on the site. These mu
 
 <div class = "rblock">
 
-# Create the permission token using the four passwords (left blank here) <br><br>
+<b># Create the permission token using the four passwords (left blank here) </b>		<br><br>
 
 twitter_tokens <- create_token(app = "JamesC",<br>  
                                consumer_key = "",<br>        
@@ -100,25 +100,25 @@ twitter_tokens <- create_token(app = "JamesC",<br>
                                access_token = "",<br>       
                                access_secret = "")<br><br><br>
 
-# Run the crawler instructing it to download Tweets that feature the word "conservation"<br><br>
-# This will only mine Tweets from 6-9 days prior to running this command <br><br>
+<b># Run the crawler instructing it to download Tweets that feature the word "conservation" </b> <br><br>
+<b># This will only mine Tweets from 6-9 days prior to running this command </b> <br><br>
 tweets1 <- search_tweets(q = "conservation", <br>
 							n = 2000)<br><br><br>
 
-# Save the Tweets as a character string <br><br>
-conservtweets <- tweets1$text<br><br><br>
+<b># Save the Tweets as a character string </b> <br><br>
+conservtweets <- tweets1$text 	<br><br><br>
 
-# Save the current working directory path                           <br><br>
+<b># Save the current working directory path </b>    <br><br>
 origwd <- getwd()  <br><br><br>
 
 
-# Set the working directory as the same folder where the crawled files are saved            <br><br>                         
+<b># Set the working directory as the same folder where the crawled files are saved      </b>      <br><br>                         
 setwd("C:\\Users\\james\\Documents\\Crawled Pages") <br><br> <br>
 
 
-# Save the Tweets as a txt file in the current working directory (where the crawled files are) <br><br>
+<b># Save the Tweets as a txt file in the current working directory (where the crawled files are) </b> <br><br>
 write.table(conservtweets, "Conservation Tweets") <br><br> <br>
-# Reset the working directory      <br><br>
+<b># Reset the working directory  </b>    <br><br>
 setwd(origwd)                                           
 </div>
 
@@ -144,20 +144,20 @@ Now that all of the files are in the same place, a corpus (a collection of text 
 
 <div class = "rblock">
 
-# Call the 'tm' package<br><br>
+<b># Call the 'tm' package</b><br><br>
 
 library(tm)<br><br><br>
 
 
 
-# Create the corpus using the folder with the crawled pages as the file path <br><br>
+<b># Create the corpus using the folder with the crawled pages as the file path </b> <br><br>
 
 conservdocs <- Corpus(DirSource("C:\\Users\\james\\Documents\\Crawled Pages"))  <br><br><br>
 
 
 
 
-# Create a unique function using a function from the 'tm' package where 'x' is the corpus name and 'pattern' is the pattern of text to be removed from the character string <br><br>
+<b># Create a unique function using a function from the 'tm' package where 'x' is the corpus name and 'pattern' is the pattern of text to be removed from the character string </b> <br><br>
 
 tospace <- content_transformer(
   function(x, pattern){ 
@@ -168,7 +168,7 @@ tospace <- content_transformer(
 
 
 
-# The unique 'tospace' function can now be used in a 'tm_map' function from the 'tm' package which is specifically designed to change text in a corpus<br><br>
+<b># The unique 'tospace' function can now be used in a 'tm_map' function from the 'tm' package which is specifically designed to change text in a corpus</b><br><br>
 
 conservdocs <- tm_map(conservdocs, tospace, "UNWANTED TEXT") 
 </div>
@@ -197,17 +197,20 @@ HTML code.
 
 <div class = "rblock">   
 
-# Call the 'qdapRegex' package<br><br>
+<b># Call the 'qdapRegex' package</b><br><br>
 
 library(gdapRegex)<br><br><br>
 
 
-# Store the requirements for the 'rm_between' function into a unique function so it can be used in a 'tm_map' command<br><br>
-# Any information between '<' and '>' (Where all HTML code will be stored) will be removed when this command is applied<br><br> EXAMPLE:<br>
+<b># Store the requirements for the 'rm_between' function into a unique function so it can be used in a 'tm_map' command</b><br><br>
 
 rmbetween <- function(x){ 
   rm_between(x, "<", ">") 
 }
+<br><br>
+<b># Any information between '<' and '>' (Where all HTML code will be stored) will be removed when this command is applied<br><br></b><br>
+
+
 </div>
 
 
@@ -224,11 +227,11 @@ Now its time to use these commands to tidy the contents of the corpus.
 
 <div class = "rblock">
 
-# Remove HTML commands<br><br>
+<b># Remove HTML commands</b><br><br>
 
 conservdocs <- tm_map(conservdocs, rmbetween)<br><br><br>         
 
-# Remove common symbols found in HTML<br><br>
+<b># Remove common symbols found in HTML</b><br><br>
 
 conservdocs <- tm_map(conservdocs, tospace, "-")<br>
 conservdocs <- tm_map(conservdocs, tospace, ":")<br>
@@ -242,22 +245,22 @@ conservdocs <- tm_map(conservdocs, tospace, "=")<br>
 conservdocs <- tm_map(conservdocs, tospace, "<")<br>
 conservdocs <- tm_map(conservdocs, tospace, ">")<br><br><br>
 
-# Remove punctuation <br><br>
+<b># Remove punctuation </b> <br><br>
 
 conservdocs <- tm_map(conservdocs, removePunctuation) <br><br><br>
 
-# Change all words into lower case <br><br>
+<b># Change all words into lower case </b> <br><br>
 
 conservdocs <- tm_map(conservdocs, content_transformer(tolower)) <br><br><br>
 
-# Remove numbers <br><br>
+<b># Remove numbers </b> <br><br>
 
 conservdocs <- tm_map(conservdocs, removeNumbers) <br><br><br> 
 
-# Remove uninteresting stop words (e.g. to, and, but)<br><br>      
+<b># Remove uninteresting stop words (e.g. to, and, but)</b><br><br>      
 conservdocs <- tm_map(conservdocs, removeWords, stopwords("english"))<br><br><br>
 
-# Remove white space from the text<br><br>
+<b># Remove white space from the text </b><br><br>
 
  conservdocs <- tm_map(conservdocs, stripWhitespace)
 </div>	
@@ -287,9 +290,9 @@ Now the text in the corpus is clean the next step is to coerce and store the cor
 
 
 <div class = "rblock">
-# Store the corpus as a DTM while setting a minimum and maximum word length to exclude anything missed by the clean up<br><br>
+<b># Store the corpus as a DTM while setting a minimum and maximum word length to exclude anything missed by the clean up</b><br><br>
 
-# Also set a minimum of term frequencies to be included in the DTM - terms occuring 3 times or less will be excluded <br><br>
+<b># Also set a minimum of term frequencies to be included in the DTM - terms occuring 3 times or less will be excluded </b> <br><br>
 
 dtmconserv <- DocumentTermMatrix(conservdocs, <br>
 control = list(wordLengths=c(4,20),<br>
@@ -298,18 +301,18 @@ bounds=list(global=c(3, 27)))) <br><br><br>
 
 
 
-# Create a list using the DTM where one column will have terms and another will have the frequency of terms<br><br>
+<b># Create a list using the DTM where one column will have terms and another will have the frequency of terms </b> <br><br>
 freqconserv <- colSums(as.matrix(dtmconserv)) <br><br><br>  
 
   
-# Create an index for the list indicating that the most frequent terms should appear first <br><br>
+<b># Create an index for the list indicating that the most frequent terms should appear first </b> <br><br>
 ordconserv <- order(freqconserv, decreasing = T)<br><br><br>
 
 
- # Apply the index    <br><br>
+<b> # Apply the index  </b>   <br><br>
 freqconserv <-  freqconserv[ordconserv] <br><br><br>
                
-# Call a sample of the list <br><br>
+<b># Call a sample of the list </b> <br><br>
 
 freqconserv[1:32]
 </div>
@@ -331,11 +334,11 @@ For example the sample list shows the stop word "also" and part of a HTML comman
 
 
 <div class = "rblock">
-# Coerce the list as a matrix <br><br>
+<b># Coerce the list as a matrix </b> <br><br>
 
 freqconserv <- as.matrix(freqconserv) <br><br><br>
     
-# Locate the unwanted term's place in the list and remove <br><br>
+<b/># Locate the unwanted term's place in the list and remove </b> <br><br>
 
 freqconserv <- freqconserv[-21, 1] <br>       
 freqconserv <- freqconserv[-28, 1]
@@ -357,12 +360,12 @@ Now we have a term list that can be manually analysed for terms based on the res
 
 <div class = "rblock">
 
-# Call the 'wordcloud' package <br><br>
+<b># Call the 'wordcloud' package </b> <br><br>
 
 library(wordcloud) <br><br>
 
-# Create the word cloud specifying the colours and plotting
-
+<b># Create the word cloud specifying the colours and plotting features </b>
+<br><br>
 wordcloud(names(freqconserv), <br>
           freqconserv,<br>
           min.freq = 50,<br>
@@ -414,13 +417,14 @@ Histograms can be created to visualise the frequency of terms related to the spe
 
 
 
+
 <div class = "rblock">
 
-# Create a data frame with the taxa terms and corresponding frequencies <br><br>
+<b># Create a data frame with the taxa terms and corresponding frequencies </b> <br><br>
 
 taxaterms <- data.frame(Term = c("bird","rhino","chlidonias", "birds", "gorilla", "butterfly", "reptile"), <br>
                         Occurences = c(121, 105, 105, 73, 64, 63, 54)) <br> <br>
-# Create the plots <br><br>
+<b># Create the plots </b> <br><br>
 plot1 <- ggplot(taxaterms,  aes(Term, Occurences)) <br>
 plot1 <- plot1 + geom_bar(stat="identity",  fill = "purple4") +ggtitle("Frequency of Taxa Terms") <br><br>
 
@@ -476,12 +480,12 @@ General taxa names such as "butterfly", "gorilla" and "reptile" suggest these ta
 
 <div class = "rblock">
 
-# Create a data frame with the location terms and corresponding frequencies <br><br>
+<b># Create a data frame with the location terms and corresponding frequencies </b> <br><br>
 
 geolocterms <- data.frame(Terms = c("australia", "africa", "zealand","europe",     "fiji",  "indonesia", "america"), <br>
                           Occurences = c( 73 ,       54 ,      50 ,      49 ,          39 ,           38 ,      32 )) <br><br>
 
-# Create the plots <br><br>
+<b># Create the plots </b> <br><br>
 plot2 <- ggplot(geolocterms,   aes(Terms, Occurences)) <br>
 plot2 <- plot2 + geom_bar(stat="identity", fill = "purple4") +ggtitle("Frequency of Geographical Location Terms")<br><br>
 plot2
@@ -531,10 +535,10 @@ The term "australia" occurs much more frequently than the others, this is likely
 
 
 <div class = "rblock">
-# Create a data frame with the location terms and corresponding frequencies <br><br>
+<b># Create a data frame with the location terms and corresponding frequencies </b> <br><br>
 envirolocterms <- data.frame(Terms = c("island", "marine", "islands","forest","water","ocean", "habitat", "tropical"), <br>
                              Occurences = c(124, 107, 102,100,69,68,67,54))<br><br>
-# Create the plots <br><br>
+<b># Create the plots </b> <br><br>
                              
 plot3 <- ggplot(envirolocterms,   aes(Terms, Occurences)) <br>
 plot3 <- plot3 + geom_bar(stat="identity", fill = "purple4") +ggtitle("Frequency of Habitat Terms")<br><br>
@@ -575,12 +579,12 @@ This finding coupled with the fact no sea animal terms occurred more frequently 
 
 
 <div class = "rblock">
-# Create a data frame with the institution terms and corresponding frequencies <br><br>
+<b># Create a data frame with the institution terms and corresponding frequencies </b> <br><br>
 
 institterms <- data.frame(Terms = c("aquarium", "centre", "museum", "sanctuary", "school", "safari", "gardens", "reserve", "building"),<br>
                           Occurences = c( 274 ,  149 ,  143 ,  120 ,  113 ,  109 ,  88 ,  65 ,  55 ))<br><br>
 
-                          # Create the plots<br><br>
+                         <b> # Create the plots </b> <br><br>
 plot4 <- ggplot(institterms, aes(Terms, Occurences))
 plot4 <- plot5 + geom_bar(stat = "identity", fill = "purple4") +ggtitle("Frequency of Institution Terms")<br><br>
 plot4
@@ -627,24 +631,24 @@ This can be used to answer many interesting questions and will be used here to d
 
 <div class = "rblock">
 
-# Return a list of words associated with "breeding" with correlations stronger than 0.3 <br><br>
+<b># Return a list of words associated with "breeding" with correlations stronger than 0.3 </b> <br><br>
 
 findAssocs(dtmconserv, "breeding", 0.3)   <br><br><br>
 
-# Manually indentify the country terms and correlation values then create objects containing this information <br><br>
+<b># Manually indentify the country terms and correlation values then create objects containing this information </b> <br><br>
 
 bterms <- c("japan", "bahamas", "barbados", "belize", "costa",  "hong", "mauritius", "monaco", "uganda", "panama",  "singapore", "antigua", "argentina",  "armenia", "cambodia", "china", "australia",  "philippines",  "indonesia", "fiji",    "france",   "madagascar", "papau"    )<br><br>
 bprobs <- c(0.7, 0.60, 0.60, 0.60, 0.60, 0.60, 0.60, 0.60, 0.60, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.4, 0.4, 0.3, 0.3, 0.4, 0.4, 0.3  , 0.3)<br><br><br>
 
-# Call the 'igraph' package to use to visualise the correlations <br><br>
+<b># Call the 'igraph' package to use to visualise the correlations </b> <br><br>
 
 library(igraph) <br><br><br>
                         
-# Create a data frame with the country terms and corresponding correlation values <br><br>                      
+<b> # Create a data frame with the country terms and corresponding correlation values </b> <br><br>                      
                                         
 b_df <- data.frame(terms = bterms, probs = bprobs)<br><br><br>
 
-# Create the visualisation<br><br>
+<b># Create the visualisation</b><br><br>
 
 b_g <- graph.data.frame(b_df, <br>
                         directed = F)  <br><br>

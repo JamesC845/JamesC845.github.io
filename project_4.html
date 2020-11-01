@@ -1,0 +1,840 @@
+<! doctype html>
+
+
+<head>
+	<title>Time Series Dashboard</title>
+		<link rel="stylesheet"
+	type="text/css"
+	href="Layout.css">
+</head>
+
+
+
+
+
+<body>
+
+	<header>
+		<nav>
+		<h1>Time Series Dashboard - Greenhouse Gas Predictions</h1>
+			<ul>
+				<li><a href="index.html"><b>Home</b></a></li>
+				<li><a href="Projects.html"> <b>Projects</b></a></li>
+			</ul>
+		</nav>
+	</header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class = "tblock">
+
+The Climate Change dataset from the ESRL/NOAA Global Monitoring Division contains information on various  atmospheric factors. The factors focused on in this project are three greenhouse gases: Carbon Dioxide (CO2), Methan (CH4) and Nitrous Oxide (N2O). Data is available on the atmospheric concentrations of these gases from May 1983 to December 2008.
+<br><br>
+The greenhouse gas measurements are expressed in Parts Per Million by Volume (ppmv), For example 2000 ppmv of CH4 would mean the concentration will be 2000 millionths of the total volume of the atmosphere.
+<br><br>
+For all three gases:
+<br><br>
+
+	<ul>
+		<li>A time series will be plotted</li>
+			<br>
+		<li>An Auto Regressive Integrated Moving Averages (ARIMA) model will be fitted to forecast values following the end of the time series</li>
+			<br>
+		<li>A tab in a dashboard application will be created that can be used to render a plot of a time series with a minimum and maximum forecasted value. This app will be user friendly and will work simply by typing in a number of months to forecast values after the most recent actual value from December 2008.
+  </li>
+			<br>
+	</ul>
+</div>
+
+
+
+
+
+
+
+
+
+<div class = "sectionheader">
+ARIMA Model Fit
+</div>
+
+
+
+
+
+
+<div class = "tblock">
+First of all a time series for each gas using data from the climate change data set will be plotted.
+</div>
+
+<div class = "rblock">
+
+climate <- read.csv("C:\\Users\\james\\Documents<br>\\climate_change.csv") <br>
+	<br> <b> # Import the CSV file </b> <br><br><br>
+
+
+plot(ts(climate$CO2), main = "CO2 Time Series", xlab = "Months Since May 1983", ylab = "Parts Per Million (ppmv)")	<br><br>
+plot(ts(climate$CH4), main = "CH4 Time Series", xlab = "Months Since May 1983", ylab = "Parts Per Million (ppmv)")	<br><br>
+plot(ts(climate$N2O), main = "N2O Time Series", xlab = "Months Since May 1983", ylab = "Parts Per Million (ppmv)")
+
+<br><br>  <b># Use the ts() command to plot a time series for each gas variable </b>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class = "plot">
+		<img src="https://jamesc845.github.io/images/ts.CO2.png"
+alt"alternate text"
+width = "50%"
+img style="border: 5px solid #4d0099">
+</div>
+
+<br>
+
+<div class = "plot">
+		<img src="https://jamesc845.github.io/images/ts.CH4.png"
+alt"alternate text"
+width = "50%"
+img style="border: 5px solid #4d0099">
+</div>
+
+<br>
+
+<div class = "plot">
+		<img src="https://jamesc845.github.io/images/ts.N2O.png"
+alt"alternate text"
+width = "50%"
+img style="border: 5px solid #4d0099">
+</div>
+
+
+<div class = "tblock">
+Time series plots simply display values from a single dependent variable. The X axis always represents time. <br><br>
+
+In this case the dependent variables are one of three greenhouse gases and the X axis represents the months between May 1983 and December 2008.  <br><br>
+
+An Auto Regressive Integrated Moving Average (ARIMA) model refers to a range of models that can be used to forecast values based on previous values in a time series. <br><br>
+
+Different ARIMA models can be chosen based on the characteristics of the time series. <br><br>
+
+
+The Integration (I) aspect of the ARIMA model forecasts values by using the difference between data values throughout the series rather than the values themselves. This way mean and variance can remain consistent throughout - an important factor involved in predictive modelling. <br><br>
+
+The Auto Regressive (AR) aspect of the ARIMA model forecasts values based on actual values and their prior values. Stronger AR characteristics in a series refers to the extent that values and their prior or 'lagged' values correlate to one another.<br><br>
+
+
+The Moving Average (MA) aspect of the ARIMA model forecasts values based on the interactions between the actual values and the error (AKA residual) values. Stronger MA characteristics in a series refers to the extent that actual values and error values correlated with one another. <br><br>
+
+All of these aspects amalgamate to create an ARIMA model that forecasts values based on the values and characteristics of a time series. <br><br>
+
+Different types of ARIMA models are chosen based on whether a time series exhibits stronger AR and/or MA characteritics. <br><br>
+
+The best ARIMA model can be chosen automatically using a very helpful R function called 'auto.arima()'. 
+
+</div>
+
+
+
+<div class = "rblock"> 
+
+library(forecast) <br><br>
+<b># Call the 'forecast' package </b>  <br><br><br>
+fit.CO2 <- auto.arima(climate$CO2)<br>
+fit.CH4 <- auto.arima(climate$CH4)<br>
+fit.N2O <- auto.arima(climate$N2O)<br><br>
+<b># Fit and store an ARIMA model for each gas variable </b>
+
+</div>
+
+
+
+
+<div class = "tblock">
+
+A helpful diagnostic tool to determine the efficacy of an ARIMA model is an Auto-Correlation Function which can be used on the residuals of an ARIMA model.<br><br>
+
+This will show whether any residual values correlate strongly with other previous/lagged residual values. <br><br>
+
+If a model's residuals correlate with one another this is a sign that there is something non-random affecting the occurence of the errors and that the model has failed to predict why these values are occuring. <br>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class = "rblock">
+
+acf(fit.CO2$residuals, main = "CO2 Autocorrelation Plot")<br>
+acf(fit.CH4residuals, main = "CH4 Autocorrelation Plot")<br>
+acf(fit.N2O$residuals, main = "N2O Autocorrelation Plot")<br><br>
+
+<b># Plot an ACF for each ARIMA model </b>
+
+</div>
+
+
+
+
+
+
+
+
+<div class = "plot">
+		<img src="https://jamesc845.github.io/images/acf.CO2.png"
+alt"alternate text"
+width = "50%"
+img style="border: 5px solid #4d0099">
+</div>
+
+<br>
+
+<div class = "tblock">
+
+The dashed lines represent the confidence interval i.e. the threshold the correlation needs to pass for it to be considered signficant. If the spike passes the dash it is a significant correlation. <br><br>
+
+The correlation at lag zero will always be perfectly positively correlated as the first value is correlated with itsself because at this point there are no lagged values to calculate a correlation. <br><br>
+
+The other correlations, however, are bad news for this model because not only are there are a number of significant ones but these values pulsate forming a pattern. As previously mentioned patterns in residual values are a sign of poor efficacy in a model.
+
+</div>
+
+
+
+
+<div class = "plot">
+		<img src="https://jamesc845.github.io/images/acf.CH4.png"
+alt"alternate text"
+width = "50%"
+img style="border: 5px solid #4d0099">
+</div>
+
+<br>
+
+<div class = "tblock">
+
+There are less significant correlations in this model and a weak pattern has formed. This is not ideal but does not discredit the model's efficacy too badly.
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class = "plot">
+		<img src="https://jamesc845.github.io/images/acf.N2O.png"
+alt"alternate text"
+width = "50%"
+img style="border: 5px solid #4d0099">
+</div>
+
+<div class = "tblock">
+
+This plot shows there are no significant correlations between lagged residual values and little to no pattern. This is evidence that this model is an ideal one.
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class = "tblock">
+
+Although the ACF plots didn't show ideal results for the CO2 and CH4 variables, further tests can be conducted to decide whether the model can be used for effective forecasting.
+
+</div>
+
+
+<div class = "rblock">
+Box.test(fit.CO2$residuals, type = "Ljung-Box")<br>
+Box.test(fit.CH4$residuals, type = "Ljung-Box")<br>
+Box.test(fit.N2O$residuals, type = "Ljung-Box")<br>
+</div>
+
+
+
+
+
+<div class = "tblock">
+The Ljung-Box test examines the null hypothesis of independence in a time series.<br><br>
+
+Here they are applied to the residuals of the ARIMA models to test the extent of independence of its residuals.<br><br>
+
+In other words the purpose of this test is to determine whether dependency between actual values exists; if this test is significant then this will be bad news for the models.
+</div>
+
+
+
+
+
+<div class = "routput">
+		<img src="https://jamesc845.github.io/images/box.CO2.png">
+</div>
+
+<div class = "routput">
+		<img src="https://jamesc845.github.io/images/box.CH4.png">
+</div>
+
+<div class = "routput">
+		<img src="https://jamesc845.github.io/images/box.N2O.png">
+</div>
+
+
+
+
+<div class = "tblock">
+All Ljung-Box tests have P-values > 0.05 which means the null hypothesis (the series' residuals are independent) is accepted.<br><br>
+
+This means that the model's errors are random and the model can be used to forecast reliably. <br><br>
+
+The next step is to start creating the dashboard.
+ </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class = "sectionheader">
+Dashboard Creation
+</div>
+
+
+
+
+
+
+<div class = "tblock">
+
+The dashboard is created using the 'Shiny' package and is created by coding two parts, the user interface and the server. <br><br>
+
+The user interface is what is seen and used by the user and makes up the aesthetics of the app. Most importantly its where the app receives an input.
+
+<br><br>
+
+The server determines how inputs are used and what information is returned.
+
+The user interface will be created first.
+
+</div>
+
+
+
+
+
+
+
+<div class = "rblock">
+library(shiny)<br><br>
+library(shinythemes)<br><br>
+<br>
+<b># Import the required packages to create a Shiny dashboard</b>
+</div>
+
+
+
+
+
+
+<div class = "rblock">
+
+
+<b># This whole block of text is the user interface (ui) code and is essentially just one command with many commands nested within it</b>
+
+
+
+<br><br><br><br><br>
+
+ui <- fluidPage(theme = shinythemes::shinytheme("superhero"), <br>
+                  navbarPage(<br>
+                    "Greenhouse Gas Predictions",<br><br><br>
+
+
+
+
+
+<b># Use the shinythemes() to select the desired theme</b>
+<br><br>
+<b># The '::' operator must be used to specify which package the command comes from so that package can be automatically imported while the app is online</b>
+<br><br>
+<b># navbarPage() is used to specify the dashboard's main title</b>
+
+
+
+
+
+                    <br><br><br><br><br><br><br><br>
+
+                
+                    tabPanel("Carbon Dioxide", <br><br>
+                             
+                       sidebarPanel( 		<br>
+                         textInput("txt1", "Insert a number of months to create a forecast period:", ""),
+                         ),    <br><br>
+                             mainPanel(<br><br>
+                               
+                               h4("Current Value"),
+                               verbatimTextOutput("values1a"), <br><br>
+                               
+                               h4("Lowest Possible Predicted Value"),
+                               verbatimTextOutput("values1b"),<br><br>
+                               
+                               h4("Highest Possible Predicted Value"),
+                               verbatimTextOutput("values1c"),<br><br>
+                               
+                               h4("CO2 Time Series Plot"),<br>
+                               plotOutput("plotout1"),<br>
+                             )  ), 	
+              
+<br><br><br><br><br><br><br><br>
+                   
+
+
+<b># tabPanel() is used to create a tab within the dashboard - there will be one tab per gas variable </b>
+<br><br>
+
+
+<b># textInput() places an input field in the user interface so the user can type in a value  </b>
+<br><br>
+
+
+<b># Here "txt1" will is the name of the object in which the user's input is stored from the input field</b>
+<br><br>
+
+
+<b># verbatimTextOutput() returns what ever information taken from the server is stored into the named object - in this case these objects are named "values1a", "values1b" and "values1c" </b> 
+<br><br>
+
+<b># plotOutput() will display an output that is stored into the named object - in this case "plotout1" - from the server</b>
+<br><br>
+
+
+<b># The way these new objects interact with the server will make more sense once the server code has been explained </b>
+
+
+<br><br><br><br><br><br><br><br>
+
+
+
+                    tabPanel("Methane",<br><br>
+                             
+
+                             sidebarPanel(<br>
+                               textInput("txt2", "Insert a number of months to create a forecast period:", ""), ),	<br><br>
+                               
+                               
+                             
+                             mainPanel(<br><br>
+
+                               
+                               h4("Current Value"),
+                               verbatimTextOutput("values2a"),<br><br>
+                               
+                               h4("Lowest Possible Predicted Value"),
+                               verbatimTextOutput("values2b"),<br><br>
+                               
+                               h4("Highest Possible Predicted Value"),
+                               verbatimTextOutput("values2c"),<br><br>
+                               
+                               h4("CH4 Time Series Plot"),<br>
+                               plotOutput("plotout2"),<br>
+                             )  ),	<br><br><br><br><br><br><br><br>
+                   
+                    
+
+
+
+
+
+
+                    
+                    tabPanel("Nitrous Oxide", <br><br>                       
+
+                             sidebarPanel(<br>
+                               tags$h3(""),
+                               textInput("txt3", "Insert a number of months to create a forecast period:", ""),
+                               
+                               
+                             ), <br><br>
+                             mainPanel(<br><br>
+                               
+                               h4("Current Value"),
+                               verbatimTextOutput("values3a"),<br><br>
+                               
+                               h4("Lowest Possible Predicted Value"),
+                               verbatimTextOutput("values3b"),<br><br>
+                               
+                               h4("Highest Possible Predicted Value"),
+                               verbatimTextOutput("values3c"),<br><br>
+                               
+                               h4("N2O Time Series Plot"),<br>
+                               plotOutput("plotout3"),
+                             )))
+
+<br><br><br><br><br><br><br><br>
+
+<b># The code for the CO2, CH4 and N2O tabs are identical other than the variable names and different numbered objects to allow seperate storage of information </b>
+<br><br>
+           
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br>
+
+<div class = "tblock">
+
+Now the user interface has been create the next step is to create the server.
+
+</div>
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class = "rblock">
+
+server <- function(input, output) { 
+ 
+<br><br>
+
+climate <- read.csv("climate_change.csv")
+
+<br><br>
+
+<b># The dataset file name must be specified in this command</b>
+<br><br>
+
+
+<br><br><br><br><br><br><br><br>
+  
+  output$plotout1 <- renderPlot( {plot(forecast::forecast( <br><br>
+
+  forecast::auto.arima( ts(climate$CO2) ), h = input$txt1), <br>
+                                      xlab = "Months Since May 1983", <br>
+                                      ylab = "Parts Per Million (ppmv)")}) <br> <br>
+
+
+<b># 'renderPlot()' allows you to display a plot created in R on the dashboard  </b>
+<br><br>
+<b># Here this command is used to display the plot of a time series with an ARIMA model forecast where h stands for the units of time - in this case months are used</b>
+<br><br>
+<b># Here the forecast period is specified as 'h = input$txt1' because it is waiting for a unit of time to be input by the dashboard user</b>
+
+
+
+
+<br><br><br><br><br>
+
+
+
+  output$values1a <- renderText({forecast::forecast( <br>
+  forecast::auto.arima(<br><br>
+
+  ts(climate$CO2)), <br>
+
+  input$txt1)$x[<br><br>
+
+  length(<br>
+  forecast::forecast(<br>
+  forecast::auto.arima(<br>
+  ts(climate$CO2)),<br>
+  input$txt1)$x)]}) 
+  <br><br>
+
+
+<b># 'output$values1a' outputs the latest value from the time series (not the forecast model) - therefore this will display the most recent actual value</b>
+
+<br><br>
+
+<b># This value will be the same no matter what forecast period is input by the user as it represents the latest actual value from the dataset rather than from an ARIMA forecasted value</b>
+
+
+
+
+
+<br><br><br><br><br>
+
+  output$values1b <- renderText({forecast::forecast( <br>forecast::auto.arima(<br><br>
+
+  ts(climate$CO2)), <br>
+
+
+  input$txt1)$lower[<br><br>
+
+  length(<br>
+  forecast::forecast(<br>
+  forecast::auto.arima(<br>
+  ts(climate$CO2)), <br>
+  input$txt1)$lower)]})
+   <br><br>
+
+   <b># 'output$values1b' is very similar to 'output$values1a' but instead it is instructed to return the lowest possible forecasted value</b>
+<br><br>
+<b># Because of this the returned value will be different based on the user input</b>
+
+
+
+  <br><br><br><br><br>
+
+  output$values1c <- renderText({forecast::forecast( <br>forecast::auto.arima( <br><br>
+
+  ts(climate$CO2)), <br>
+
+
+  input$txt1)$upper[<br><br>
+
+  length(<br>
+  forecast::forecast(<br>
+  forecast::auto.arima(<br>
+  ts(climate$CO2)),<br>
+    input$txt1)$upper)]})
+  <br><br>
+<b># 'output$values1c' is almost identical to 'output$values1b' but it will return the highest possible forecast value </b>
+
+
+
+
+
+<br><br><br><br><br><br><br><br><br><br>
+  output$plotout2 <- renderPlot( {plot(forecast::forecast( <br><br>
+
+  forecast::auto.arima( ts(climate$CH4) ), h = input$txt2), <br>
+                                      xlab = "Months Since May 1983", <br>
+                                      ylab = "Parts Per Million (ppmv)")}) 
+<br><br><br>
+
+  output$values2a <- renderText({forecast::forecast( <br>
+  forecast::auto.arima(<br><br>
+  ts(climate$CH4)), <br>
+  input$txt2)$x[<br><br>
+  length(<br>
+  forecast::forecast(<br>
+  forecast::auto.arima(<br>
+  ts(climate$CH4)),<br>
+  input$txt2)$x)]}) 
+  
+  <br><br><br>
+
+  output$values2b <- renderText({forecast::forecast( <br>forecast::auto.arima(<br><br>
+  ts(climate$CH4)), <br>
+  input$txt2)$lower[<br><br>
+  length(<br>
+  forecast::forecast(<br>
+  forecast::auto.arima(<br>
+  ts(climate$CH4)), <br>
+  input$txt2)$lower)]})
+   
+   <br><br><br>
+
+  output$values2c <- renderText({forecast::forecast( <br>forecast::auto.arima( <br><br>
+  ts(climate$CH4)), <br>
+  input$txt2)$upper[<br><br>
+  length(<br>
+  forecast::forecast(<br>
+  forecast::auto.arima(<br>
+  ts(climate$CH4)),<br>
+    input$txt2)$upper)]})
+
+<br><br><br>
+
+<b># This is the section for the CH4 tab</b>
+
+<br><br><br><br><br>
+
+
+output$plotout3 <- renderPlot( {plot(forecast::forecast( <br><br>
+
+  forecast::auto.arima( ts(climate$N2O) ), h = input$txt3), <br>
+                                      xlab = "Months Since May 1983", <br>
+                                      ylab = "Parts Per Million (ppmv)")}) 
+
+<br><br>
+
+  output$values3a <- renderText({forecast::forecast( <br>
+  forecast::auto.arima(<br><br>
+  ts(climate$N2O)), <br>
+  input$tx32)$x[<br><br>
+  length(<br>
+  forecast::forecast(<br>
+  forecast::auto.arima(<br>
+  ts(climate$N2O)),<br>
+  input$txt3)$x)]}) 
+
+<br><br>
+
+  output$values3b <- renderText({forecast::forecast( <br>forecast::auto.arima(<br><br>
+  ts(climate$N2O)), <br>
+  input$txt3)$lower[<br><br>
+  length(<br>
+  forecast::forecast(<br>
+  forecast::auto.arima(<br>
+  ts(climate$N2O)), <br>
+  input$txt3)$lower)]})
+
+  <br><br>
+
+  output$values3c <- renderText({forecast::forecast( <br>forecast::auto.arima( <br><br>
+  ts(climate$N2O)), <br>
+  input$txt3)$upper[<br><br>
+  length(<br>
+  forecast::forecast(<br>
+  forecast::auto.arima(<br>
+  ts(climate$N2O)),<br>
+    input$txt3)$upper)]})
+<br><br>
+}
+
+<br><br><br>
+<b># This is the section for the N2O tab</b>
+<br><br>
+<b># The code for each tab are identical in every way other than the variable names and the object numbers</b>
+
+
+
+<br><br> 
+
+</div>
+
+
+
+
+
+
+
+
+<div class = "tblock">
+
+The code for the user interface and server must be saved in seperate R files. These are then uploaded to a server hosted by shinyapps.io along with the dataset file. <br><br>
+
+The way the inputs are used to create outputs by this dashboard will become much clearer by using it. <br><br>
+
+Click 
+<a  href="https://jamesc845.shinyapps.io/GreenhouseGasPrediction/" <b> here </a> 
+to see the dashboard. 
+
+</div>

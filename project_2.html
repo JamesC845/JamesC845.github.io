@@ -16,7 +16,7 @@
 
 	<header>
 		<nav>
-		<h1>Logistic Regression Project - Flights</h1>
+		<h1>Logistic Regression - Flights Dataset</h1>
 			<ul>
 				<li><a href="index.html"><b>Home</b></a></li>
 				<li><a href="Projects.html"> <b>Projects</b></a></li>
@@ -49,18 +49,18 @@ However, the original dataset is messy. The first aim of this project is to clea
 
 
 <div class = "rblock">
-# Import the txt file containing the dataset specifying the delimeters as "|"<br><br>
+<b># Import the txt file containing the dataset specifying the delimeters as "|" </b><br><br>
 NEWDATA<- read.table(<br>file="C:\\Users\\james\\Documents<br>\\flights.txt" <br>
                    sep="|", <br>            
                    quote="", <br>               
                    comment.char="") <br><br><br>
 
-# The original file has 1,191,806 rows so will take a smaller sample to use for this project<br><br>    
+<b># The original file has 1,191,806 rows so will take a smaller sample to use for this project</b> <br><br>    
 flights <- NEWDATA[1:30000,]<br><br><br>
 
 
-# Take a look at the first few variables<br><br>
-head(flights[,1:5])  
+<b># Take a look at the first few variables </b>  <br><br>
+head(flights[,1:5]) 
 </div>
 
 
@@ -79,14 +79,14 @@ First of all, R hasn't recognised the first row as the column/variable name so t
 
 
 <div class = "rblock">
-# Select the first value of each column to use as the column titles<br><br>
+<b># Select the first value of each column to use as the column titles</b><br><br>
 names(flights) <- as.character(unlist(flights[1,]))<br><br><br>
    
-# Then remove the row of the whole data set<br><br>
-flights <- flights[-1,]<br><br><br>
+<b># Then remove the row of the whole data set </b> <br><br>
+flights <- flights[-1,]</b><br><br><br>
 
-# See the new variable titles<br><br>
-head(flights[,1:5])
+<b># See the new variable titles </b> <br><br>
+head(flights[,1:5]) 
 </div>
 
 
@@ -123,9 +123,9 @@ head(flights$DISTANCE)
 
 <div class = "rblock">
 
-# Replace the string "miles" with absence of characters ("")<br><br>
+<b># Replace the string "miles" with absence of characters ("")</b><br><br>
 flights$DISTANCE <- gsub("miles", "", flights$DISTANCE)<br><br><br>
-# Replace the remaining white space (" ") with absence of characters ("")<br><br>
+<b># Replace the remaining white space (" ") with absence of characters ("") </b> <br><br>
 flights$DISTANCE <- gsub(" ", "", flights$DISTANCE)   
 </div>
 
@@ -137,20 +137,20 @@ flights$DISTANCE <- gsub(" ", "", flights$DISTANCE)
 Say time of day  needed to be used as a predictor variable (e.g. whether flights leaving in the AM or PM have an effect on a response variable) then we would need to use the departure times to create a new AM/PM variable. 
 </div>
 <div class = "rblock">
-# Check the departure times variables<br><br>
-head(flights$DEPTIME)
+<b># Check the departure times variables </b> <br><br>
+head(flights$DEPTIME) 
 </div>
 <div class = "routput">
 		<img src="https://jamesc845.github.io/images/head(flights$DEPTIME).png">
 </div>
 <div class = "rblock">
-# Coerce the variable from a factor to a numeric vector<br><br>
+<b># Coerce the variable from a factor to a numeric vector</b><br><br>
 flights$DEPTIME <- as.numeric(flights$DEPTIME)<br><br><br>
-# Create the new variable name followed the requirements for the new value <br><br>
-# In this instance the requirements are whether times are before or after noon (i.e. 1200) they are then coded as AM or PM respectively in the new column  <br><br>
+<b># Create the new variable name followed the requirements for the new value </b> <br><br>
+<b># In this instance the requirements are whether times are before or after noon (i.e. 1200) they are then coded as AM or PM respectively in the new column </b> <br><br>
 flights$AMPMDEP[flights$DEPTIME >= 1200] <- "PM"  <br>      
 flights$AMPMDEP[flights$DEPTIME <= 1200] <- "AM"  <br><br><br>
-# Coerce the new variable as a factor <br><br>
+<b># Coerce the new variable as a factor  </b> <br><br>
 flights$AMPMDEP <- as.factor(flights$AMPMDEP)   
 </div>
 
@@ -167,7 +167,7 @@ The research in question is whether flights are more or less likely to be cancel
 </div>
 
 <div class = "rblock"> 
-# Check the CANCELLED variable <br><br>
+<b> # Check the CANCELLED variable </b>  <br><br>
 unique(flights$CANCELLED)
 </div>
 <div class = "routput">
@@ -180,16 +180,16 @@ Logistic Regression is used when the response variable has binomial data (1/0, Y
 
 <div class = "rblock">
 
-# Must coerce the variable into a character string so "T" and "F" are recognised as letters rather than TRUE/FALSE logical values in R<br><br>
+<b>  # Must coerce the variable into a character string so "T" and "F" are recognised as letters rather than TRUE/FALSE logical values in R </b>   <br><br>
 flights$CANCELLED <- as.character(flights$CANCELLED)<br><br><br>
 
-# Identify each possible value in the CANCELLED variable and change it to the appropriate binomial value<br><br>
+<b>   # Identify each possible value in the CANCELLED variable and change it to the appropriate binomial value </b>   <br><br>
 flights$CANCELLED[flights$CANCELLED == "False"] <- 0 <br>   
 flights$CANCELLED[flights$CANCELLED == "F"] <- 0 <br>       
 flights$CANCELLED[flights$CANCELLED == "T"] <- 1 <br>
 flights$CANCELLED[flights$CANCELLED == "True"] <- 1<br><br><br>
 
-# Then coerce the resulting variable to a numeric vector<br><br>
+<b> # Then coerce the resulting variable to a numeric vector </b> <br><br> 
 flights$CANCELLED <- as.numeric(flights$CANCELLED)      
 </div>
 
@@ -205,26 +205,28 @@ The next step is to perform a training/test split in order to test the data's po
 
 
 <div class = "rblock">
-# Set the seed so randomly sampled data can be replicated later <br><br>
+<b> # Set the seed so randomly sampled data can be replicated later  </b> <br><br>
 
 set.seed(7) <br><br><br>
 
-# Create an 80% size index of the data set <br><br>
+<b>   # Create an 80% size index of the data set </b> <br><br>
 train.index <- sample(1:nrow(flights), 0.8*nrow(flights))
 <br><br><br>
 
-# Use the index to create an 80% sized training dataset<br><br>
+<b> # Use the index to create an 80% sized training dataset </b> <br><br>
 train.flights <- flights[train.index,] <br><br><br>
 
-# Use the index to create a 20% sized testing dataset<br><br> 
+<b> # Use the index to create a 20% sized testing dataset </b>  <br><br> 
 test.flights <- flights[-train.index,]<br><br><br>
 
-# Fit a Logistic Regression model using the training dataset <br><br>
+<b> # Fit a Logistic Regression model using the training dataset </b> <br><br>
 train.model <- glm(CANCELLED ~ <br>
                   ORIGINSTATENAME,<br>
                 data = train.flights,<br>
                 family = "binomial")    <br><br><br>
-# Call the summary statistics of the training model <br><br>                
+
+
+<b> # Call the summary statistics of the training model </b> <br><br>                
 summary(train.model)
 </div>
 
@@ -249,11 +251,11 @@ However, AIC values are primarily used for comparing different models. Because o
 
 
 <div class = "rblock">
-# This command will predict values using parameters from the training model<br><br>
+<b> # This command will predict values using parameters from the training model	</b>	<br><br>
 predict.flights <- predict(train.model, type="response")<br><br><br>
 
-    # This next command will indicate the accuracy of the model predictions by returning the mean of a set of values predicted by the training model while using true values from the CANCELLED variable as an index <br><br>
-    # Using this index means only the mean prediction for the true outcomes are calculated<br><br>
+    <b> # This next command will indicate the accuracy of the model predictions by returning the mean of a set of values predicted by the training model while using true values from the CANCELLED variable as an index	</b>  <br><br>
+    <b> # Using this index means only the mean prediction for the true outcomes are calculated </b> <br><br>
 tapply(predict.flights, train.flights$CANCELLED, mean)
 
 </div>
@@ -276,15 +278,15 @@ A Receiver Operator Characteristic (ROC) curve  plots the True Positive Rate aga
 
 <div class = "rblock">
 
-# Load the ROCR package <br><br>
+<b> # Load the ROCR package  </b> <br><br>
 library(ROCR)<br><br><br>
 
 
-# Create the curve using the predicted values and true values<br><br>
+<b> # Create the curve using the predicted values and true values </b> <br><br>
 ROCRcurve <- prediction(predict.flights, train.flights$CANCELLED)<br><br><br>
 
  
-# Create the graph specifying the True Positve Rate ("tpr") and False Positive Rate ("fpr") as axes<br><br>
+<b> # Create the graph specifying the True Positve Rate ("tpr") and False Positive Rate ("fpr") as axes </b>  <br><br>
 ROCRgraph <- performance(ROCRcurve, "tpr", "fpr")<br><br><br>
 
 plot(ROCRgraph, colorize = T)
@@ -326,7 +328,7 @@ According to this curve's threhsold spectrum, located on the right side of the p
 
 
 <div class = "rblock">
-# Create a confusion using a low threshold value of 0.02 taken from the ROC curve<br><br>
+<b> # Create a confusion using a low threshold value of 0.02 taken from the ROC curve	</b>	<br><br>
 
 CM <- table(train.flights$CANCELLED,
       predict.flights > 0.02)  <br><br><br>
@@ -353,7 +355,7 @@ Results from the confusion matrix can be used to calculate the rate of accuracy.
 
 
 <div class = "rblock">
-# Accuracy = (True Positives + True Negatives)/Total Values <br><br> 
+<b># Accuracy = (True Positives + True Negatives)/Total Values </b><br><br> 
 (CM[1,2]+CM[2,2])/sum(CM)
 </div>
 
@@ -372,7 +374,7 @@ Since this model uses categorical predictor variables, the best way to visualise
 
 <div class = "rblock">
 
-# Store the proportion of flight cancellations from each state<br><br>
+<b># Store the proportion of flight cancellations from each state</b><br><br>
 
 Alabama <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Alabama"] == 1)	<br>			
 Alaska <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Alaska"] == 1)<br>				
@@ -390,13 +392,13 @@ Maine <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Maine"] == 1)
 <br>Texas <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Texas"] == 1)					
 <br>Washington <- mean(flights$CANCELLED<br>[flights$ORIGINSTATENAME=="Washington"] == 1)		<br><br><br>
 
-# Then store the proportions in a data frame<br><br>
+<b># Then store the proportions in a data frame </b> <br><br>
 cancellation.proportions <- data.frame(<br><br>State = c("Alabama", "Alaska", "California", "Georgia", "Illinois", "Louisiana", "Maine",  "Maryland", "Minnesota", "NMexico", "NYork", "Ohio", "Oregon", "Texas", "Washington"), <br><br>
 
                                 Proportion = c(Alabama, Alaska, California, Georgia, Illinois, Louisiana, Maine, Maryland, Minnesota, NMexico, NYork, Ohio, Oregon, Texas, Washington))
                                 <br><br><br>
  
-# Then plot the proportions in a bar plot<br><br>
+<b> # Then plot the proportions in a bar plot	</b>	<br><br>
 
 ggplot(cancellation.proportions, aes(x = State, y = Proportion))+
   geom_bar(stat = "identity", color = "black", fill = "4")
@@ -426,14 +428,14 @@ The next step is to fit the final model.
 
 <div class = "rblock">
 
-# Fit the final model using the full dataset <br><br>
+<b> # Fit the final model using the full dataset </b>	<br><br>
 
 flights.model <- glm(flights$CANCELLED ~ <br>
                        flights$ORIGINSTATENAME, <br>
                      data = flights,<br>
                      family = "binomial")   <br><br><br>
 
-# See the summary statistics <br><br>
+<b> # See the summary statistics </b>	 <br><br>
 
 summary(flights.model)
 </div>
